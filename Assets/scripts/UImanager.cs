@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+锘縰sing System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using DG.Tweening;
 
 public class UImanager : MonoBehaviour
 {
     public Image image1;
     public Image image2;
-
     public Image image3;
     public Image image4;
     public Image image5;
@@ -19,149 +18,169 @@ public class UImanager : MonoBehaviour
     public Image image10;
     public Image image11;
     public Image image12;
-
     public Image image13;
+
     public Transform Video;
     public Transform Video1;
-    void Update()
+
+    private readonly List<Image> panels = new List<Image>();
+
+    private void Awake()
+    {
+        panels.AddRange(new[]
+        {
+            image1, image2, image3, image4, image5, image6, image7,
+            image8, image9, image10, image11, image12, image13
+        });
+
+        HideAllPanels(true);
+    }
+
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            // 获取屏幕中心点
-            Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, 0);
+            var screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+            var ray = Camera.main.ScreenPointToRay(screenCenter);
 
-            // 从屏幕中心发射射线
-            Ray ray = Camera.main.ScreenPointToRay(screenCenter);
-
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out var hit))
             {
-                if (hit.collider.gameObject.name =="ZTBl1")
+                switch (hit.collider.gameObject.name)
                 {
-                    image1.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-
+                    case "ZTBl1":
+                        ShowPanel(image1);
+                        break;
+                    case "ZTBl2":
+                        ShowPanel(image2);
+                        break;
+                    case "ZTBl3":
+                        ShowPanel(image13);
+                        break;
+                    case "ZK1":
+                        ShowPanel(image3);
+                        break;
+                    case "ZK2":
+                        ShowPanel(image4);
+                        break;
+                    case "ZK3":
+                        ShowPanel(image5);
+                        break;
+                    case "ZK4":
+                        ShowPanel(image6);
+                        break;
+                    case "ZK5":
+                        ShowPanel(image7);
+                        break;
+                    case "ZKCJ1":
+                        ShowPanel(image8);
+                        break;
+                    case "ZKCJ2":
+                        ShowPanel(image9);
+                        break;
+                    case "ZKCJ3":
+                        ShowPanel(image10);
+                        break;
+                    case "ZKCJ4":
+                        ShowPanel(image11);
+                        break;
+                    case "ZKCJ5":
+                        ShowPanel(image12);
+                        break;
                 }
 
-                if (hit.collider.gameObject.name == "ZTBl2")
+                if (Video != null && hit.collider.name == Video.name)
                 {
-                    image2.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-
-                if (hit.collider.gameObject.name == "ZTBl3")
-                {
-                    image13.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-
-                if (hit.collider.gameObject.name == "ZK1")
-                {
-                    image3.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-
-                if (hit.collider.gameObject.name == "ZK2")
-                {
-                    image4.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if (hit.collider.gameObject.name == "ZK3")
-                {
-                    image5.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if (hit.collider.gameObject.name == "ZK4")
-                {
-                    image6.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if (hit.collider.gameObject.name == "ZK5")
-                {
-                    image7.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-
-
-                if (hit.collider.gameObject.name == "ZKCJ1")
-                {
-                    image8.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if (hit.collider.gameObject.name == "ZKCJ2")
-                {
-                    image9.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if (hit.collider.gameObject.name == "ZKCJ3")
-                {
-                    image10.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if (hit.collider.gameObject.name == "ZKCJ4")
-                {
-                    image11.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if (hit.collider.gameObject.name == "ZKCJ5")
-                {
-                    image12.gameObject.SetActive(true);
-                    Cursor.visible = true;
-                    Cursor.lockState = CursorLockMode.None;
-                }
-                if(hit.collider.name==Video.name)
-                {
-                    VideoPlayer v1 = Video.GetComponent<VideoPlayer>();
-                    if (v1.isPlaying)
-                        v1.Stop();
-                    else 
-                        v1.Play();
-                }
-                if (hit.collider.name == Video1.name)
-                {
-                    VideoPlayer v1 = Video1.GetComponent<VideoPlayer>();
-                    if (v1.isPlaying)
-                        v1.Stop();
+                    var player = Video.GetComponent<VideoPlayer>();
+                    if (player.isPlaying)
+                    {
+                        player.Stop();
+                    }
                     else
-                        v1.Play();
+                    {
+                        player.Play();
+                    }
+                }
+
+                if (Video1 != null && hit.collider.name == Video1.name)
+                {
+                    var player = Video1.GetComponent<VideoPlayer>();
+                    if (player.isPlaying)
+                    {
+                        player.Stop();
+                    }
+                    else
+                    {
+                        player.Play();
+                    }
                 }
             }
         }
 
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            // 关闭所有的Image对象
-            image1.gameObject.SetActive(false);
-            image2.gameObject.SetActive(false);
-            image3.gameObject.SetActive(false);
-            image4.gameObject.SetActive(false);
-            image5.gameObject.SetActive(false);
-            image6.gameObject.SetActive(false);
-            image7.gameObject.SetActive(false);
-            image8.gameObject.SetActive(false);
-            image9.gameObject.SetActive(false);
-            image10.gameObject.SetActive(false);
-            image11.gameObject.SetActive(false);
-            image12.gameObject.SetActive(false);
-            image13.gameObject.SetActive(false);
-            // 隐藏鼠标光标
+            HideAllPanels(false);
             Cursor.visible = false;
-            // 锁定鼠标光标
             Cursor.lockState = CursorLockMode.Locked;
         }
+    }
+
+    private void ShowPanel(Image panel)
+    {
+        if (panel == null)
+        {
+            return;
+        }
+
+        HideAllPanels(true);
+
+        panel.gameObject.SetActive(true);
+        var canvasGroup = EnsureCanvasGroup(panel);
+        var rectTransform = panel.rectTransform;
+
+        canvasGroup.alpha = 0f;
+        rectTransform.localScale = Vector3.one * 0.94f;
+        canvasGroup.DOFade(1f, 0.22f);
+        rectTransform.DOScale(1f, 0.24f).SetEase(Ease.OutBack);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void HideAllPanels(bool instant)
+    {
+        foreach (var panel in panels)
+        {
+            if (panel == null || !panel.gameObject.activeSelf)
+            {
+                continue;
+            }
+
+            var canvasGroup = EnsureCanvasGroup(panel);
+            var rectTransform = panel.rectTransform;
+
+            if (instant)
+            {
+                canvasGroup.alpha = 0f;
+                rectTransform.localScale = Vector3.one;
+                panel.gameObject.SetActive(false);
+            }
+            else
+            {
+                rectTransform.DOKill();
+                canvasGroup.DOKill();
+                canvasGroup.DOFade(0f, 0.15f).OnComplete(() => panel.gameObject.SetActive(false));
+            }
+        }
+    }
+
+    private CanvasGroup EnsureCanvasGroup(Image panel)
+    {
+        var canvasGroup = panel.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = panel.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        return canvasGroup;
     }
 }

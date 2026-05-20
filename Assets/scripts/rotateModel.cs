@@ -9,6 +9,7 @@ public class rotateModel : MonoBehaviour
     private Vector3 startMousePosition;
     private Vector3 startModelRotation;
     private float rotateScale = 1f;
+    [SerializeField] private float idleYawSpeed = 18f;
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,10 @@ public class rotateModel : MonoBehaviour
 
             // Apply the rotation to the model
             modelTransform.eulerAngles = startModelRotation + rotation;
+        }
+        else if (modelTransform != null)
+        {
+            modelTransform.Rotate(0f, idleYawSpeed * Time.deltaTime, 0f, Space.World);
         }
     }
 }

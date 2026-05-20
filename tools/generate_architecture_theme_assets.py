@@ -352,6 +352,34 @@ def draw_title_strip(path, title, subtitle, size):
     img.save(ROOT / path)
 
 
+def draw_preface(path, size=(1288, 954)):
+    img = background(size, top=(246, 236, 214), bottom=(214, 184, 139))
+    draw = ImageDraw.Draw(img)
+    w, h = size
+    border(draw, size)
+    draw.rectangle((70, 70, w - 70, 205), fill=(235, 220, 191))
+    draw.text((96, 78), "前言", font=font(54, bold=True, serif=True), fill=(0, 0, 0))
+    draw.text((100, 154), "从木构逻辑走进中国古代建筑", font=font(28, bold=True), fill=(0, 0, 0))
+    chip = (w - 330, 101, w - 92, 151)
+    draw.rounded_rectangle(chip, radius=18, fill=(201, 168, 98))
+    draw_centered_in_box(draw, chip, "古建导览", font(25, bold=True), (0, 0, 0))
+    draw_roof(draw, (92, 228, 430, 460))
+    draw_platform(draw, (105, 470, 455, 720))
+    body_x = 520
+    body_w = w - 620
+    lines = [
+        "中国古代建筑是一门关于结构、空间与礼制的综合艺术。它不仅承载生活功能，也反映了材料、工法、审美和秩序。",
+        "在本展馆中，您将看到斗拱、榫卯、屋顶形制、台基柱础与古桥营造等内容。每一处展品都对应一种真实的营造经验和历史知识。",
+        "我们希望用更直观的方式，把古建筑从“看见”推进到“理解”。当您在场景中点击展品、观察光影与构件时，就能慢慢读懂中国建筑的结构之美。"
+    ]
+    y = 250
+    for line in lines:
+        y = draw_wrapped(draw, (body_x, y), line, font(28), (0, 0, 0), body_w, 10) + 18
+    draw.line((92, 795, w - 92, 795), fill=(0, 0, 0), width=2)
+    draw_wrapped(draw, (110, 825), "提示：在展馆内点击展品可查看知识卡片；专题空间可继续体验构件与方位互动。", font(24), (0, 0, 0), w - 220, 6)
+    img.save(ROOT / path)
+
+
 def cover_crop(img, box, crop=None):
     img = ImageOps.exif_transpose(img.convert("RGB"))
     if crop:
@@ -608,6 +636,7 @@ def main():
         draw_bridge,
         (1288, 954),
     )
+    draw_preface("Assets/Materials/preface.png")
     draw_start()
     draw_icon("Assets/Materials/Images/donut.png", (234, 234))
 
