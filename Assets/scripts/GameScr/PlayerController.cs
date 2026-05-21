@@ -19,7 +19,12 @@ public class PlayerController : MonoBehaviour
 
     public List<Transform> finalPath = new List<Transform>();
 
-    private float blend;
+    [Header("Motion")]
+    public float stepDuration = 0.24f;
+    public float stairDurationMultiplier = 1.45f;
+    public float hopPower = 0.18f;
+    public float turnDuration = 0.16f;
+    public Ease moveEase = Ease.InOutSine;
 
     void Start()
     {
@@ -44,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
         // CLICK ON CUBE
 
-        if (Input.GetMouseButtonDown(0))
+        if (!walking && Input.GetMouseButtonDown(0))
         {
             Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition); RaycastHit mouseHit;
 
@@ -53,11 +58,13 @@ public class PlayerController : MonoBehaviour
                 if (mouseHit.transform.GetComponent<Walkable>() != null)
                 {
                     clickedCube = mouseHit.transform;
+                    if (clickedCube == currentCube)
+                    {
+                        return;
+                    }
                     DOTween.Kill(gameObject.transform);
                     finalPath.Clear();
                     FindPath();
-
-                    blend = transform.position.y - clickedCube.position.y > 0 ? -1 : 1;
 
                     indicator.position = mouseHit.transform.GetComponent<Walkable>().GetWalkPoint();
                     Sequence s = DOTween.Sequence();
@@ -87,12 +94,23 @@ public class PlayerController : MonoBehaviour
 
         pastCubes.Add(currentCube);
 
+        if (!nextCubes.Any())
+        {
+            Clear();
+            return;
+        }
+
         ExploreCube(nextCubes, pastCubes);
         BuildPath();
     }
 
     void ExploreCube(List<Transform> nextCubes, List<Transform> visitedCubes)
     {
+        if (!nextCubes.Any())
+        {
+            return;
+        }
+
         Transform current = nextCubes.First();
         nextCubes.Remove(current);
 
@@ -127,10 +145,19 @@ public class PlayerController : MonoBehaviour
             if (cube.GetComponent<Walkable>().previousBlock != null)
                 cube = cube.GetComponent<Walkable>().previousBlock;
             else
+            {
+                Clear();
                 return;
+            }
         }
 
         finalPath.Insert(0, clickedCube);
+
+        if (finalPath.Count <= 1)
+        {
+            Clear();
+            return;
+        }
         
         FollowPath();
     }
@@ -143,12 +170,17 @@ public class PlayerController : MonoBehaviour
 
         for (int i = finalPath.Count - 1; i > 0; i--)
         {
-            float time = finalPath[i].GetComponent<Walkable>().isStair ? 1.5f : 1;
+            Walkable walkable = finalPath[i].GetComponent<Walkable>();
+            float time = stepDuration * (walkable.isStair ? stairDurationMultiplier : 1f);
+            float hop = walkable.isStair ? hopPower * 0.65f : hopPower;
+            Vector3 targetPoint = walkable.GetWalkPoint();
 
-            s.Append(transform.DOMove(finalPath[i].GetComponent<Walkable>().GetWalkPoint(), .2f * time).SetEase(Ease.Linear));
+            s.Append(transform.DOJump(targetPoint, hop, 1, time).SetEase(moveEase));
 
-            if(!finalPath[i].GetComponent<Walkable>().dontRotate)
-               s.Join(transform.DOLookAt(finalPath[i].position, .1f, AxisConstraint.Y, Vector3.up));
+            if (!walkable.dontRotate)
+            {
+                s.Join(transform.DOLookAt(finalPath[i].position, turnDuration, AxisConstraint.Y, Vector3.up).SetEase(Ease.OutSine));
+            }
         }
 
         if (clickedCube.GetComponent<Walkable>().isButton)

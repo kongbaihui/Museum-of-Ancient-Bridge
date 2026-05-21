@@ -7,3 +7,5 @@ obj/
 *.csproj
 *.sln
 *.user
+.dotnet_home/
+.nuget_packages/

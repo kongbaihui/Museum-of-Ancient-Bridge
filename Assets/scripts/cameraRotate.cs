@@ -6,15 +6,24 @@ public class cameraRotate : MonoBehaviour
 {
     public float sensX;
     public float sensY;
+    public float lookSmooth = 14f;
 
     public Transform orientation;
 
     float yRotation;
     float xRotation;
+    float currentYRotation;
+    float currentXRotation;
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        Vector3 initialEuler = transform.rotation.eulerAngles;
+        currentXRotation = initialEuler.x > 180f ? initialEuler.x - 360f : initialEuler.x;
+        currentYRotation = initialEuler.y;
+        xRotation = currentXRotation;
+        yRotation = currentYRotation;
     }
 
     // Update is called once per frame
@@ -28,7 +37,11 @@ public class cameraRotate : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        float blend = 1f - Mathf.Exp(-lookSmooth * Time.deltaTime);
+        currentXRotation = Mathf.Lerp(currentXRotation, xRotation, blend);
+        currentYRotation = Mathf.Lerp(currentYRotation, yRotation, blend);
+
+        transform.rotation = Quaternion.Euler(currentXRotation, currentYRotation, 0);
+        orientation.rotation = Quaternion.Euler(0, currentYRotation, 0);
     }
 }

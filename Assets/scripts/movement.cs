@@ -6,12 +6,18 @@ public class movement : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
+    public float groundAcceleration = 16f;
+    public float airAcceleration = 7f;
+    public float idleDeceleration = 10f;
     
     public float groundDrag;
 
+    [Header("Jump")]
     public float jumpForce;
     public float jumpCoolDown;
     public float airMutiplier;
+    public float coyoteTime = 0.12f;
+    public float jumpBufferTime = 0.12f;
     bool readyToJump;
 
     [Header("keybinds")]
@@ -32,11 +38,15 @@ public class movement : MonoBehaviour
     Vector3 moveDirection;
 
     Rigidbody rb;
+    float lastGroundedTime;
+    float lastJumpPressedTime = -10f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         readyToJump = true;
     }
 
@@ -44,6 +54,10 @@ public class movement : MonoBehaviour
     private void Update()
     {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        if (grounded)
+        {
+            lastGroundedTime = Time.time;
+        }
 
         MyInput();
         SpeedCon();
@@ -65,9 +79,18 @@ public class movement : MonoBehaviour
         horizontallInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        if (Input.GetKeyDown(jumpKey))
+        {
+            lastJumpPressedTime = Time.time;
+        }
+
+        bool canUseBufferedJump = Time.time - lastJumpPressedTime <= jumpBufferTime;
+        bool canUseCoyoteTime = Time.time - lastGroundedTime <= coyoteTime;
+
+        if (canUseBufferedJump && readyToJump && canUseCoyoteTime)
         {
             readyToJump = false;
+            lastJumpPressedTime = -10f;
             Jump();
             Invoke(nameof(ResetJump), jumpCoolDown);
         }
@@ -77,11 +100,19 @@ public class movement : MonoBehaviour
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontallInput;
+        Vector3 desiredDirection = moveDirection.sqrMagnitude > 0.01f ? moveDirection.normalized : Vector3.zero;
+        float acceleration = grounded ? groundAcceleration : airAcceleration;
 
-        if(grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-        else if(!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f*airMutiplier, ForceMode.Force);
+        if (desiredDirection != Vector3.zero)
+        {
+            float multiplier = grounded ? 1f : airMutiplier;
+            rb.AddForce(desiredDirection * acceleration * multiplier, ForceMode.Acceleration);
+        }
+        else if (grounded)
+        {
+            Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddForce(-flatVelocity * idleDeceleration, ForceMode.Acceleration);
+        }
 
     }
 
