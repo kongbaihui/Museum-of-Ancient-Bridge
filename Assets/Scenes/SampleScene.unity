@@ -7593,6 +7593,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensX: 100
   sensY: 100
+  lookSmooth: 14
   orientation: {fileID: 2055375784}
 --- !u!1 &983718018
 GameObject:
@@ -9328,6 +9329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraPosition: {fileID: 1269200748}
+  followSharpness: 18
 --- !u!4 &1159970380
 Transform:
   m_ObjectHideFlags: 0
@@ -9645,10 +9647,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
+  groundAcceleration: 16
+  airAcceleration: 7
+  idleDeceleration: 10
   groundDrag: 5
   jumpForce: 12
   jumpCoolDown: 0.9
   airMutiplier: 0.2
+  coyoteTime: 0.12
+  jumpBufferTime: 0.12
   jumpKey: 32
   playerHeight: 2
   whatIsGround:
