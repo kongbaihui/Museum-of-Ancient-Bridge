@@ -9,3 +9,4 @@ obj/
 *.user
 .dotnet_home/
 .nuget_packages/
+__pycache__/
