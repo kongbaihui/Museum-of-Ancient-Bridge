@@ -5,12 +5,12 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;
-    public float groundAcceleration = 16f;
+    public float moveSpeed = 30f;
+    public float groundAcceleration = 120f;
     public float airAcceleration = 7f;
     public float idleDeceleration = 10f;
     
-    public float groundDrag;
+    public float groundDrag = 1.5f;
 
     [Header("Jump")]
     public float jumpForce;
@@ -47,6 +47,8 @@ public class movement : MonoBehaviour
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        if (whatIsGround.value == 0)
+            whatIsGround = Physics.DefaultRaycastLayers;
         readyToJump = true;
     }
 
