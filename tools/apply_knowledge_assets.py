@@ -1,8 +1,6 @@
 from pathlib import Path
 from shutil import copyfile
 
-from PIL import Image, ImageOps
-
 
 ROOT = Path(__file__).resolve().parents[1]
 KNOWLEDGE_DIR = ROOT / "pic" / "\u77e5\u8bc6"
@@ -44,22 +42,10 @@ def replace_assets(pairs, destination_dir: Path) -> None:
         print(f"{source.name} -> {target.name}")
 
 
-def build_wall_poster(source: Path, target: Path) -> None:
-    with Image.open(source).convert("RGB") as img:
-        canvas = Image.new("RGB", (1086, 1448), (240, 227, 201))
-        framed = ImageOps.contain(img, (980, 980), method=Image.Resampling.LANCZOS)
-        left = (canvas.width - framed.width) // 2
-        top = 110
-        canvas.paste(framed, (left, top))
-        canvas.save(target, format="PNG")
-        print(f"{source.name} -> {target.name} (wall)")
-
-
 def main() -> None:
     replace_assets(SURFACE_TARGETS, UI_DIR)
     replace_assets(DETAIL_TARGETS, PERSON_UI_DIR)
-    for source_name, target_name in WALL_TARGETS:
-        build_wall_poster(KNOWLEDGE_DIR / source_name, MATERIALS_DIR / target_name)
+    replace_assets(WALL_TARGETS, MATERIALS_DIR)
 
 
 if __name__ == "__main__":
