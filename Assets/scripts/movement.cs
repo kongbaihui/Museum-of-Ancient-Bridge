@@ -5,17 +5,17 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed;
-    public float groundAcceleration = 16f;
-    public float airAcceleration = 7f;
-    public float idleDeceleration = 10f;
+    public float moveSpeed = 14f;
+    public float groundAcceleration = 28f;
+    public float airAcceleration = 12f;
+    public float idleDeceleration = 18f;
     
-    public float groundDrag;
+    public float groundDrag = 7f;
 
     [Header("Jump")]
-    public float jumpForce;
-    public float jumpCoolDown;
-    public float airMutiplier;
+    public float jumpForce = 14f;
+    public float jumpCoolDown = 0.6f;
+    public float airMutiplier = 0.45f;
     public float coyoteTime = 0.12f;
     public float jumpBufferTime = 0.12f;
     bool readyToJump;

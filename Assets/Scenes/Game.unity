@@ -205,10 +205,10 @@ MonoBehaviour:
   currentCube: {fileID: 0}
   clickedCube: {fileID: 0}
   indicator: {fileID: 61062075}
-  stepDuration: 0.24
-  stairDurationMultiplier: 1.45
-  hopPower: 0.18
-  turnDuration: 0.16
+  stepDuration: 0.14
+  stairDurationMultiplier: 1.2
+  hopPower: 0.12
+  turnDuration: 0.08
   moveEase: 4
   finalPath: []
 --- !u!4 &33815327

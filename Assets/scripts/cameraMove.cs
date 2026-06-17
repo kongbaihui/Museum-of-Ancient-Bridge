@@ -6,7 +6,7 @@ public class cameraMove : MonoBehaviour
 {
 
     public Transform cameraPosition;
-    public float followSharpness = 18f;
+    public float followSharpness = 35f;
 
 
     void LateUpdate()
