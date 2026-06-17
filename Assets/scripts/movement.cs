@@ -5,10 +5,10 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 20f;
-    public float groundAcceleration = 32f;
-    public float airAcceleration = 14f;
-    public float idleDeceleration = 20f;
+    public float moveSpeed = 30f;
+    public float groundAcceleration = 48f;
+    public float airAcceleration = 21f;
+    public float idleDeceleration = 30f;
     
     public float groundDrag = 8f;
 

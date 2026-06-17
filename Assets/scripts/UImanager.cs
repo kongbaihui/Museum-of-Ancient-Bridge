@@ -57,22 +57,32 @@ public class UImanager : MonoBehaviour
                         ShowPanel(image13);
                         break;
                     case "ZK1":
+                        ShowPanel(image8);
+                        break;
                     case "ZKCJ1":
                         ShowPanel(image3);
                         break;
                     case "ZK2":
+                        ShowPanel(image9);
+                        break;
                     case "ZKCJ2":
                         ShowPanel(image4);
                         break;
                     case "ZK3":
+                        ShowPanel(image10);
+                        break;
                     case "ZKCJ3":
                         ShowPanel(image5);
                         break;
                     case "ZK4":
+                        ShowPanel(image11);
+                        break;
                     case "ZKCJ4":
                         ShowPanel(image6);
                         break;
                     case "ZK5":
+                        ShowPanel(image12);
+                        break;
                     case "ZKCJ5":
                         ShowPanel(image7);
                         break;
