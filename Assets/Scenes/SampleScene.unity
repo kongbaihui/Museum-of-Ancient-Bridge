@@ -7591,9 +7591,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b6e4c750613e749afb2a8731d11077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 1.8
-  sensY: 1.8
-  lookSmooth: 18
+  sensX: 3.2
+  sensY: 3.2
+  lookSmooth: 20
   orientation: {fileID: 2055375784}
 --- !u!1 &983718018
 GameObject:
@@ -9646,12 +9646,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98549d1b806c53245acd69a4fc9c6ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 14
-  groundAcceleration: 28
-  airAcceleration: 12
-  idleDeceleration: 18
-  groundDrag: 7
-  jumpForce: 14
+  moveSpeed: 18
+  groundAcceleration: 34
+  airAcceleration: 15
+  idleDeceleration: 22
+  groundDrag: 8
+  jumpForce: 10.5
   jumpCoolDown: 0.6
   airMutiplier: 0.45
   coyoteTime: 0.12
