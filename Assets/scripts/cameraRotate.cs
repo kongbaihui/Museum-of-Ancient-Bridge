@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class cameraRotate : MonoBehaviour
 {
-    public float sensX = 3.2f;
-    public float sensY = 3.2f;
+    public float sensX = 2.56f;
+    public float sensY = 2.56f;
     public float lookSmooth = 20f;
 
     public Transform orientation;

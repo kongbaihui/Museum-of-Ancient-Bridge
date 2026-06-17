@@ -208,7 +208,7 @@ def create_landscape_banner(slot: Slot) -> Image.Image:
     return canvas
 
 
-def create_vertical_person(slot: Slot, size: tuple[int, int]) -> Image.Image:
+def create_vertical_person(slot: Slot, size: tuple[int, int] = (900, 1200)) -> Image.Image:
     canvas = create_panel(size)
     draw = ImageDraw.Draw(canvas)
     portrait = open_rgb(PIC_DIR / slot.portrait_source)
@@ -225,18 +225,12 @@ def create_vertical_person(slot: Slot, size: tuple[int, int]) -> Image.Image:
     return canvas
 
 
-def create_landscape_detail(slot: Slot) -> Image.Image:
-    canvas = create_panel((1288, 954))
-    detail = open_rgb(PIC_DIR / slot.detail_source)
-    paste_contained(canvas, detail, (86, 34, 1202, 920))
-    return canvas
+def create_detail_source(slot: Slot) -> Image.Image:
+    return open_rgb(PIC_DIR / slot.detail_source)
 
 
-def create_vertical_detail(slot: Slot, size: tuple[int, int]) -> Image.Image:
-    canvas = create_panel(size)
-    detail = open_rgb(PIC_DIR / slot.detail_source)
-    paste_contained(canvas, detail, (18, 18, size[0] - 18, size[1] - 18))
-    return canvas
+def create_vertical_detail(slot: Slot) -> Image.Image:
+    return open_rgb(PIC_DIR / slot.detail_source)
 
 
 def save(image: Image.Image, path: Path) -> None:
@@ -254,13 +248,13 @@ def replace_slot(slot: Slot) -> None:
     save(create_landscape_banner(slot), PERSON_UI_DIR / slot.person_banner)
 
     vertical_person_path = PERSON_UI_DIR / slot.person_vertical
-    save(create_vertical_person(slot, image_size(vertical_person_path)), vertical_person_path)
+    save(create_vertical_person(slot), vertical_person_path)
 
-    save(create_landscape_detail(slot), UI_DIR / slot.detail_large)
+    save(create_detail_source(slot), UI_DIR / slot.detail_large)
     save(create_landscape_banner(slot), UI_DIR / slot.detail_banner)
 
     vertical_detail_path = MATERIALS_DIR / slot.detail_vertical
-    save(create_vertical_detail(slot, image_size(vertical_detail_path)), vertical_detail_path)
+    save(create_vertical_detail(slot), vertical_detail_path)
 
 
 def main(slots: Iterable[Slot]) -> None:
