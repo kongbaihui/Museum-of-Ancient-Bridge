@@ -1,11 +1,14 @@
 from pathlib import Path
 from shutil import copyfile
 
+from PIL import Image, ImageOps
+
 
 ROOT = Path(__file__).resolve().parents[1]
 KNOWLEDGE_DIR = ROOT / "pic" / "\u77e5\u8bc6"
 UI_DIR = ROOT / "Assets" / "Materials" / "\u53e4\u4ee3\u6570\u5b66\u6210\u5c31\u56fe" / "UI"
 PERSON_UI_DIR = UI_DIR / "person"
+MATERIALS_DIR = ROOT / "Assets" / "Materials" / "\u53e4\u4ee3\u6570\u5b66\u6210\u5c31\u56fe" / "Materials"
 
 
 SURFACE_TARGETS = [
@@ -24,6 +27,14 @@ DETAIL_TARGETS = [
     ("\u5c4b\u9876\u5f62\u5236\u8be6\u7ec6\u4ecb\u7ecd.png", "\u79e6\u4e5d\u662d 1.png"),
 ]
 
+WALL_TARGETS = [
+    ("\u6597\u62f1.png", "\u4e5d\u7ae0\u7b97\u672f.png"),
+    ("\u69ab\u536f.png", "\u51e0\u4f55\u539f\u672c.png"),
+    ("\u53f0\u57fa\u4e0e\u67f1\u7840.png", "\u5468\u9ac0\u7b97\u7ecf.png"),
+    ("\u53e4\u6865\u8425\u9020.png", "\u5b59\u5b50\u7b97\u7ecf.png"),
+    ("\u5c4b\u9876\u5f62\u5236.png", "\u7f09\u53e4\u7b97\u7ecf.png"),
+]
+
 
 def replace_assets(pairs, destination_dir: Path) -> None:
     for source_name, target_name in pairs:
@@ -33,9 +44,22 @@ def replace_assets(pairs, destination_dir: Path) -> None:
         print(f"{source.name} -> {target.name}")
 
 
+def build_wall_poster(source: Path, target: Path) -> None:
+    with Image.open(source).convert("RGB") as img:
+        canvas = Image.new("RGB", (1086, 1448), (240, 227, 201))
+        framed = ImageOps.contain(img, (980, 980), method=Image.Resampling.LANCZOS)
+        left = (canvas.width - framed.width) // 2
+        top = 110
+        canvas.paste(framed, (left, top))
+        canvas.save(target, format="PNG")
+        print(f"{source.name} -> {target.name} (wall)")
+
+
 def main() -> None:
     replace_assets(SURFACE_TARGETS, UI_DIR)
     replace_assets(DETAIL_TARGETS, PERSON_UI_DIR)
+    for source_name, target_name in WALL_TARGETS:
+        build_wall_poster(KNOWLEDGE_DIR / source_name, MATERIALS_DIR / target_name)
 
 
 if __name__ == "__main__":
