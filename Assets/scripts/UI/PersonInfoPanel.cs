@@ -9,8 +9,8 @@ using UnityEditor;
 
 public class PersonInfoPanel : MonoBehaviour
 {
-    private const float PanelWidth = 1460f;
-    private const float PanelHeight = 840f;
+    private const float PanelWidth = 1500f;
+    private const float PanelHeight = 860f;
 
     private CanvasGroup canvasGroup;
     private Image portraitImage;
@@ -97,58 +97,70 @@ public class PersonInfoPanel : MonoBehaviour
         backdrop.raycastTarget = true;
 
         var panel = ExhibitUi.Rect("PersonInfoPanelFrame", root, Vector2.zero, new Vector2(PanelWidth, PanelHeight));
-        ExhibitUi.Image("PaperBackgroundImage", panel, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(PanelWidth, PanelHeight));
-        ExhibitUi.Image("WoodFrameImage", panel, ExhibitUi.SolidSprite(new Color32(92, 54, 26, 255)), Color.white, Vector2.zero, new Vector2(PanelWidth, PanelHeight));
-        ExhibitUi.Image("InnerPaper", panel, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(PanelWidth - 56f, PanelHeight - 56f));
-        ExhibitUi.Image("GoldTopLine", panel, ExhibitUi.SolidSprite(new Color32(198, 150, 62, 255)), Color.white, new Vector2(0f, 296f), new Vector2(1280f, 4f));
-        ExhibitUi.Image("GoldBottomLine", panel, ExhibitUi.SolidSprite(new Color32(198, 150, 62, 255)), Color.white, new Vector2(0f, -354f), new Vector2(1280f, 4f));
+        ExhibitUi.Image("WoodFrameImage", panel, ExhibitUi.SolidSprite(new Color32(78, 43, 20, 255)), Color.white, Vector2.zero, new Vector2(PanelWidth, PanelHeight));
+        ExhibitUi.Image("PaperBackgroundImage", panel, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(PanelWidth - 58f, PanelHeight - 58f));
+        ExhibitUi.Image("PaperWash", panel, ExhibitUi.SolidSprite(new Color32(255, 246, 213, 122)), Color.white, Vector2.zero, new Vector2(PanelWidth - 120f, PanelHeight - 126f));
+        ExhibitUi.Image("TopInkBand", panel, ExhibitUi.SolidSprite(new Color32(76, 45, 24, 232)), Color.white, new Vector2(0f, 324f), new Vector2(1220f, 70f));
+        ExhibitUi.Image("GoldTopLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, 284f), new Vector2(1260f, 4f));
+        ExhibitUi.Image("GoldBottomLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, -358f), new Vector2(1260f, 4f));
 
         AddCornerPatterns(panel);
 
-        nameText = ExhibitUi.Text("Name_TMP", panel, string.Empty, 68, ExhibitUi.DarkBrown, new Vector2(-420f, 330f), new Vector2(760f, 84f), TextAlignmentOptions.Left);
+        var museumText = ExhibitUi.Text("Museum_TMP", panel, "中国古建筑博物馆 · 人物档案", 29, new Color32(232, 186, 93, 255), new Vector2(-300f, 324f), new Vector2(760f, 44f), TextAlignmentOptions.Left);
+        museumText.fontStyle = FontStyles.Bold;
+
+        nameText = ExhibitUi.Text("Name_TMP", panel, string.Empty, 82, new Color32(253, 239, 205, 255), new Vector2(-560f, 252f), new Vector2(350f, 94f), TextAlignmentOptions.Center);
         nameText.font = ExhibitUi.TitleFont();
         nameText.fontStyle = FontStyles.Bold;
-        subtitleText = ExhibitUi.Text("Subtitle_TMP", panel, string.Empty, 26, ExhibitUi.SoftBrown, new Vector2(-395f, 280f), new Vector2(820f, 42f), TextAlignmentOptions.Left);
+        subtitleText = ExhibitUi.Text("Subtitle_TMP", panel, string.Empty, 30, ExhibitUi.SoftBrown, new Vector2(-160f, 252f), new Vector2(760f, 48f), TextAlignmentOptions.Left);
 
-        AddSeal(panel, new Vector2(565f, 314f), "馆藏");
+        AddSeal(panel, new Vector2(550f, 314f), "馆藏");
 
-        var portraitFrame = ExhibitUi.Rect("PortraitArea", panel, new Vector2(482f, 88f), new Vector2(380f, 455f));
-        ExhibitUi.Image("PortraitFrameImage", portraitFrame, ExhibitUi.SolidSprite(new Color32(107, 63, 31, 255)), Color.white, Vector2.zero, new Vector2(380f, 455f));
-        ExhibitUi.Image("PortraitMatImage", portraitFrame, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(344f, 419f));
-        portraitImage = ExhibitUi.Image("PortraitImage", portraitFrame, null, Color.white, Vector2.zero, new Vector2(320f, 392f));
+        var portraitFrame = ExhibitUi.Rect("PortraitArea", panel, new Vector2(505f, 22f), new Vector2(360f, 436f));
+        ExhibitUi.Image("PortraitShadow", portraitFrame, ExhibitUi.SolidSprite(new Color32(59, 35, 20, 120)), Color.white, new Vector2(12f, -12f), new Vector2(360f, 436f));
+        ExhibitUi.Image("PortraitFrameImage", portraitFrame, ExhibitUi.SolidSprite(new Color32(107, 63, 31, 255)), Color.white, Vector2.zero, new Vector2(360f, 436f));
+        ExhibitUi.Image("PortraitMatImage", portraitFrame, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(324f, 400f));
+        portraitImage = ExhibitUi.Image("PortraitImage", portraitFrame, null, Color.white, new Vector2(0f, 26f), new Vector2(294f, 326f));
         portraitImage.preserveAspect = true;
+        ExhibitUi.Image("PortraitNamePlate", portraitFrame, ExhibitUi.SolidSprite(new Color32(120, 39, 29, 235)), Color.white, new Vector2(0f, -174f), new Vector2(230f, 50f));
+        var portraitLabel = ExhibitUi.Text("PortraitLabel_TMP", portraitFrame, "营造匠师", 27, new Color32(255, 238, 216, 255), new Vector2(0f, -174f), new Vector2(210f, 38f), TextAlignmentOptions.Center);
+        portraitLabel.fontStyle = FontStyles.Bold;
 
         sectionTitles = new TextMeshProUGUI[4];
         sectionBodies = new TextMeshProUGUI[4];
-        AddSection(panel, 0, "Section_Biography", new Vector2(-308f, 162f), new Vector2(780f, 158f));
-        AddSection(panel, 1, "Section_Achievement", new Vector2(-308f, -23f), new Vector2(780f, 175f));
-        AddSection(panel, 2, "Section_Contribution", new Vector2(-308f, -223f), new Vector2(780f, 185f));
-        AddSection(panel, 3, "Section_Influence", new Vector2(482f, -223f), new Vector2(380f, 185f));
+        AddSection(panel, 0, "Section_Biography", "一", new Vector2(-255f, 130f), new Vector2(930f, 126f));
+        AddSection(panel, 1, "Section_Achievement", "二", new Vector2(-255f, -13f), new Vector2(930f, 126f));
+        AddSection(panel, 2, "Section_Contribution", "三", new Vector2(-255f, -156f), new Vector2(930f, 126f));
+        AddSection(panel, 3, "Section_Influence", "四", new Vector2(-255f, -299f), new Vector2(930f, 126f));
 
         AddCloseButton(panel);
     }
 
-    private void AddSection(RectTransform parent, int index, string name, Vector2 position, Vector2 size)
+    private void AddSection(RectTransform parent, int index, string name, string number, Vector2 position, Vector2 size)
     {
         var section = ExhibitUi.Rect(name, parent, position, size);
-        ExhibitUi.Image("SectionPaper", section, ExhibitUi.SolidSprite(new Color32(248, 239, 214, 232)), Color.white, Vector2.zero, size);
-        ExhibitUi.Image("SectionLeftLine", section, ExhibitUi.SolidSprite(new Color32(154, 42, 32, 255)), Color.white, new Vector2(-size.x / 2f + 5f, 0f), new Vector2(5f, size.y - 22f));
+        ExhibitUi.Image("SectionShadow", section, ExhibitUi.SolidSprite(new Color32(68, 38, 18, 42)), Color.white, new Vector2(8f, -8f), size);
+        ExhibitUi.Image("SectionPaper", section, ExhibitUi.SolidSprite(new Color32(250, 241, 216, 240)), Color.white, Vector2.zero, size);
+        ExhibitUi.Image("SectionTopLine", section, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, size.y / 2f - 5f), new Vector2(size.x - 24f, 3f));
+        ExhibitUi.Image("SectionNumberSeal", section, ExhibitUi.SolidSprite(new Color32(139, 37, 28, 235)), Color.white, new Vector2(-size.x / 2f + 38f, 28f), new Vector2(46f, 46f));
+        var numberText = ExhibitUi.Text("SectionNumber_TMP", section, number, 26, new Color32(255, 238, 216, 255), new Vector2(-size.x / 2f + 38f, 28f), new Vector2(40f, 38f), TextAlignmentOptions.Center);
+        numberText.fontStyle = FontStyles.Bold;
 
-        sectionTitles[index] = ExhibitUi.Text("SectionTitle_TMP", section, string.Empty, 27, ExhibitUi.SealRed, new Vector2(18f, size.y / 2f - 30f), new Vector2(size.x - 48f, 34f), TextAlignmentOptions.Left);
+        sectionTitles[index] = ExhibitUi.Text("SectionTitle_TMP", section, string.Empty, 29, ExhibitUi.SealRed, new Vector2(-size.x / 2f + 118f, 31f), new Vector2(size.x - 160f, 36f), TextAlignmentOptions.Left);
         sectionTitles[index].fontStyle = FontStyles.Bold;
-        sectionBodies[index] = ExhibitUi.Text("Body_TMP", section, string.Empty, 23, ExhibitUi.DarkBrown, new Vector2(18f, -16f), new Vector2(size.x - 52f, size.y - 68f), TextAlignmentOptions.TopLeft);
+        sectionBodies[index] = ExhibitUi.Text("Body_TMP", section, string.Empty, 24, ExhibitUi.DarkBrown, new Vector2(24f, -25f), new Vector2(size.x - 76f, 70f), TextAlignmentOptions.TopLeft);
         sectionBodies[index].lineSpacing = 8f;
     }
 
     private void AddCloseButton(RectTransform panel)
     {
-        var buttonRoot = ExhibitUi.Rect("CloseButton", panel, new Vector2(625f, 350f), new Vector2(120f, 42f));
-        var buttonImage = ExhibitUi.Image("CloseButtonImage", buttonRoot, ExhibitUi.SolidSprite(new Color32(115, 37, 27, 255)), Color.white, Vector2.zero, new Vector2(120f, 42f));
+        var buttonRoot = ExhibitUi.Rect("CloseButton", panel, new Vector2(628f, 374f), new Vector2(128f, 48f));
+        var buttonImage = ExhibitUi.Image("CloseButtonImage", buttonRoot, ExhibitUi.SolidSprite(new Color32(115, 37, 27, 255)), Color.white, Vector2.zero, new Vector2(128f, 48f));
         buttonImage.raycastTarget = true;
         var button = buttonRoot.gameObject.AddComponent<Button>();
         button.targetGraphic = buttonImage;
         button.onClick.AddListener(() => closeRequested?.Invoke());
-        ExhibitUi.Text("CloseButton_TMP", buttonRoot, "关闭", 24, Color.white, Vector2.zero, new Vector2(112f, 36f), TextAlignmentOptions.Center).fontStyle = FontStyles.Bold;
+        ExhibitUi.Text("CloseButton_TMP", buttonRoot, "关闭", 25, Color.white, Vector2.zero, new Vector2(116f, 38f), TextAlignmentOptions.Center).fontStyle = FontStyles.Bold;
     }
 
     private static void AddSeal(RectTransform parent, Vector2 position, string text)
@@ -164,7 +176,7 @@ public class PersonInfoPanel : MonoBehaviour
         var color = new Color32(196, 150, 68, 210);
         Vector2[] positions =
         {
-            new Vector2(-650f, 360f), new Vector2(650f, 360f), new Vector2(-650f, -360f), new Vector2(650f, -360f)
+            new Vector2(-674f, 374f), new Vector2(674f, 374f), new Vector2(-674f, -374f), new Vector2(674f, -374f)
         };
 
         foreach (var position in positions)
@@ -236,6 +248,8 @@ internal static class ExhibitUi
         tmp.alignment = alignment;
         tmp.enableWordWrapping = true;
         tmp.overflowMode = TextOverflowModes.Overflow;
+        tmp.extraPadding = true;
+        tmp.parseCtrlCharacters = true;
         tmp.raycastTarget = false;
         SetText(tmp, text);
         return tmp;
@@ -336,28 +350,15 @@ internal static class ExhibitUi
             return chineseFont;
         }
 
-        TMP_FontAsset projectFont = LoadProjectChineseFontAsset();
-        if (projectFont != null)
-        {
-            chineseFont = projectFont;
-            return chineseFont;
-        }
-
         try
         {
-            Font font = CreateOsFont(new[] { "DengXian", "Microsoft YaHei UI", "Microsoft YaHei", "SimHei", "SimSun", "KaiTi" }, 72);
+            Font font = LoadProjectFont("Assets/Materials/Fonts/DENG.TTF") ??
+                        LoadProjectFont("Assets/Materials/Fonts/DENGB.TTF") ??
+                        CreateOsFont(new[] { "DengXian", "Microsoft YaHei UI", "Microsoft YaHei", "SimHei", "SimSun", "KaiTi" }, 72);
 
             if (font != null)
             {
-                chineseFont = TMP_FontAsset.CreateFontAsset(
-                    font,
-                    72,
-                    9,
-                    GlyphRenderMode.SDFAA,
-                    4096,
-                    4096,
-                    AtlasPopulationMode.Dynamic);
-                chineseFont.name = "RuntimeChineseTMPFont";
+                chineseFont = CreateRuntimeFontAsset(font, 72, "RuntimeChineseTMPFont");
                 return chineseFont;
             }
         }
@@ -379,19 +380,13 @@ internal static class ExhibitUi
 
         try
         {
-            Font font = CreateOsFont(new[] { "STXinwei", "STXingkai", "STKaiti", "KaiTi", "FZShuTi", "Microsoft YaHei", "SimHei" }, 88);
+            Font font = LoadProjectFont("Assets/Materials/Fonts/STXINWEI.TTF") ??
+                        LoadProjectFont("Assets/Materials/Fonts/STKAITI.TTF") ??
+                        CreateOsFont(new[] { "STXinwei", "STXingkai", "STKaiti", "KaiTi", "FZShuTi", "Microsoft YaHei", "SimHei" }, 88);
 
             if (font != null)
             {
-                titleFont = TMP_FontAsset.CreateFontAsset(
-                    font,
-                    88,
-                    9,
-                    GlyphRenderMode.SDFAA,
-                    4096,
-                    4096,
-                    AtlasPopulationMode.Dynamic);
-                titleFont.name = "RuntimeChineseTitleTMPFont";
+                titleFont = CreateRuntimeFontAsset(font, 88, "RuntimeChineseTitleTMPFont");
                 AddFallback(titleFont, ChineseFont());
                 return titleFont;
             }
@@ -405,17 +400,31 @@ internal static class ExhibitUi
         return titleFont;
     }
 
-    private static TMP_FontAsset LoadProjectChineseFontAsset()
+    private static TMP_FontAsset CreateRuntimeFontAsset(Font font, int samplingPointSize, string assetName)
+    {
+        var fontAsset = TMP_FontAsset.CreateFontAsset(
+            font,
+            samplingPointSize,
+            9,
+            GlyphRenderMode.SDFAA,
+            4096,
+            4096,
+            AtlasPopulationMode.Dynamic,
+            true);
+
+        fontAsset.name = assetName;
+        fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+        fontAsset.isMultiAtlasTexturesEnabled = true;
+        return fontAsset;
+    }
+
+    private static Font LoadProjectFont(string path)
     {
 #if UNITY_EDITOR
-        var fontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Materials/Fonts/DENG SDF.asset");
-        if (fontAsset != null)
-        {
-            fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
-            return fontAsset;
-        }
+        return AssetDatabase.LoadAssetAtPath<Font>(path);
+#else
+        return null;
 #endif
-        return Resources.Load<TMP_FontAsset>("Fonts/DENG SDF");
     }
 
     private static Font CreateOsFont(string[] fontNames, int size)
