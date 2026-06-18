@@ -100,38 +100,42 @@ public class PersonInfoPanel : MonoBehaviour
         ExhibitUi.Image("WoodFrameImage", panel, ExhibitUi.SolidSprite(new Color32(78, 43, 20, 255)), Color.white, Vector2.zero, new Vector2(PanelWidth, PanelHeight));
         ExhibitUi.Image("PaperBackgroundImage", panel, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(PanelWidth - 58f, PanelHeight - 58f));
         ExhibitUi.Image("PaperWash", panel, ExhibitUi.SolidSprite(new Color32(255, 246, 213, 122)), Color.white, Vector2.zero, new Vector2(PanelWidth - 120f, PanelHeight - 126f));
-        ExhibitUi.Image("TopInkBand", panel, ExhibitUi.SolidSprite(new Color32(76, 45, 24, 232)), Color.white, new Vector2(0f, 324f), new Vector2(1220f, 70f));
-        ExhibitUi.Image("GoldTopLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, 284f), new Vector2(1260f, 4f));
+        ExhibitUi.Image("GoldTopLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, 292f), new Vector2(1260f, 4f));
         ExhibitUi.Image("GoldBottomLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, -358f), new Vector2(1260f, 4f));
 
         AddCornerPatterns(panel);
 
-        var museumText = ExhibitUi.Text("Museum_TMP", panel, "中国古建筑博物馆 · 人物档案", 29, new Color32(232, 186, 93, 255), new Vector2(-300f, 324f), new Vector2(760f, 44f), TextAlignmentOptions.Left);
+        var titlePlaque = ExhibitUi.Rect("TitlePlaque", panel, new Vector2(0f, 344f), new Vector2(650f, 54f));
+        ExhibitUi.Image("PlaqueOuter", titlePlaque, ExhibitUi.SolidSprite(new Color32(82, 48, 24, 255)), Color.white, Vector2.zero, new Vector2(650f, 54f));
+        ExhibitUi.Image("PlaqueInner", titlePlaque, ExhibitUi.SolidSprite(new Color32(38, 24, 15, 245)), Color.white, Vector2.zero, new Vector2(620f, 34f));
+        var museumText = ExhibitUi.Text("Museum_TMP", titlePlaque, "中国古建筑博物馆 · 人物档案", 28, new Color32(232, 186, 93, 255), Vector2.zero, new Vector2(590f, 38f), TextAlignmentOptions.Center);
         museumText.fontStyle = FontStyles.Bold;
 
-        nameText = ExhibitUi.Text("Name_TMP", panel, string.Empty, 82, new Color32(253, 239, 205, 255), new Vector2(-560f, 252f), new Vector2(350f, 94f), TextAlignmentOptions.Center);
+        var portraitArea = ExhibitUi.Rect("PortraitArea", panel, new Vector2(-500f, -20f), new Vector2(360f, 620f));
+        ExhibitUi.Image("PortraitAreaShadow", portraitArea, ExhibitUi.SolidSprite(new Color32(68, 38, 18, 50)), Color.white, new Vector2(10f, -10f), new Vector2(360f, 620f));
+        ExhibitUi.Image("PortraitAreaPaper", portraitArea, ExhibitUi.SolidSprite(new Color32(250, 241, 216, 242)), Color.white, Vector2.zero, new Vector2(360f, 620f));
+        ExhibitUi.Image("PortraitAreaTopLine", portraitArea, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, 293f), new Vector2(320f, 4f));
+
+        var portraitFrame = ExhibitUi.Rect("PortraitFrame", portraitArea, new Vector2(0f, 120f), new Vector2(292f, 332f));
+        ExhibitUi.Image("PortraitFrameImage", portraitFrame, ExhibitUi.SolidSprite(new Color32(107, 63, 31, 255)), Color.white, Vector2.zero, new Vector2(292f, 332f));
+        ExhibitUi.Image("PortraitMatImage", portraitFrame, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(260f, 300f));
+        portraitImage = ExhibitUi.Image("PortraitImage", portraitFrame, null, Color.white, Vector2.zero, new Vector2(238f, 276f));
+        portraitImage.preserveAspect = true;
+
+        nameText = ExhibitUi.Text("Name_TMP", portraitArea, string.Empty, 76, ExhibitUi.DarkBrown, new Vector2(0f, -98f), new Vector2(300f, 92f), TextAlignmentOptions.Center);
         nameText.font = ExhibitUi.TitleFont();
         nameText.fontStyle = FontStyles.Bold;
-        subtitleText = ExhibitUi.Text("Subtitle_TMP", panel, string.Empty, 30, ExhibitUi.SoftBrown, new Vector2(-160f, 252f), new Vector2(760f, 48f), TextAlignmentOptions.Left);
+        subtitleText = ExhibitUi.Text("Subtitle_TMP", portraitArea, string.Empty, 24, ExhibitUi.SoftBrown, new Vector2(0f, -210f), new Vector2(300f, 118f), TextAlignmentOptions.Center);
+        subtitleText.lineSpacing = 8f;
 
-        AddSeal(panel, new Vector2(550f, 314f), "馆藏");
-
-        var portraitFrame = ExhibitUi.Rect("PortraitArea", panel, new Vector2(505f, 22f), new Vector2(360f, 436f));
-        ExhibitUi.Image("PortraitShadow", portraitFrame, ExhibitUi.SolidSprite(new Color32(59, 35, 20, 120)), Color.white, new Vector2(12f, -12f), new Vector2(360f, 436f));
-        ExhibitUi.Image("PortraitFrameImage", portraitFrame, ExhibitUi.SolidSprite(new Color32(107, 63, 31, 255)), Color.white, Vector2.zero, new Vector2(360f, 436f));
-        ExhibitUi.Image("PortraitMatImage", portraitFrame, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(324f, 400f));
-        portraitImage = ExhibitUi.Image("PortraitImage", portraitFrame, null, Color.white, new Vector2(0f, 26f), new Vector2(294f, 326f));
-        portraitImage.preserveAspect = true;
-        ExhibitUi.Image("PortraitNamePlate", portraitFrame, ExhibitUi.SolidSprite(new Color32(120, 39, 29, 235)), Color.white, new Vector2(0f, -174f), new Vector2(230f, 50f));
-        var portraitLabel = ExhibitUi.Text("PortraitLabel_TMP", portraitFrame, "营造匠师", 27, new Color32(255, 238, 216, 255), new Vector2(0f, -174f), new Vector2(210f, 38f), TextAlignmentOptions.Center);
-        portraitLabel.fontStyle = FontStyles.Bold;
+        AddSeal(panel, new Vector2(-668f, 300f), "人物\n档案");
 
         sectionTitles = new TextMeshProUGUI[4];
         sectionBodies = new TextMeshProUGUI[4];
-        AddSection(panel, 0, "Section_Biography", "一", new Vector2(-255f, 130f), new Vector2(930f, 126f));
-        AddSection(panel, 1, "Section_Achievement", "二", new Vector2(-255f, -13f), new Vector2(930f, 126f));
-        AddSection(panel, 2, "Section_Contribution", "三", new Vector2(-255f, -156f), new Vector2(930f, 126f));
-        AddSection(panel, 3, "Section_Influence", "四", new Vector2(-255f, -299f), new Vector2(930f, 126f));
+        AddSection(panel, 0, "Section_Biography", "一", new Vector2(-55f, 112f), new Vector2(450f, 240f));
+        AddSection(panel, 1, "Section_Achievement", "二", new Vector2(430f, 112f), new Vector2(450f, 240f));
+        AddSection(panel, 2, "Section_Contribution", "三", new Vector2(-55f, -178f), new Vector2(450f, 240f));
+        AddSection(panel, 3, "Section_Influence", "四", new Vector2(430f, -178f), new Vector2(450f, 240f));
 
         AddCloseButton(panel);
     }
@@ -141,15 +145,15 @@ public class PersonInfoPanel : MonoBehaviour
         var section = ExhibitUi.Rect(name, parent, position, size);
         ExhibitUi.Image("SectionShadow", section, ExhibitUi.SolidSprite(new Color32(68, 38, 18, 42)), Color.white, new Vector2(8f, -8f), size);
         ExhibitUi.Image("SectionPaper", section, ExhibitUi.SolidSprite(new Color32(250, 241, 216, 240)), Color.white, Vector2.zero, size);
-        ExhibitUi.Image("SectionTopLine", section, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, size.y / 2f - 5f), new Vector2(size.x - 24f, 3f));
-        ExhibitUi.Image("SectionNumberSeal", section, ExhibitUi.SolidSprite(new Color32(139, 37, 28, 235)), Color.white, new Vector2(-size.x / 2f + 38f, 28f), new Vector2(46f, 46f));
-        var numberText = ExhibitUi.Text("SectionNumber_TMP", section, number, 26, new Color32(255, 238, 216, 255), new Vector2(-size.x / 2f + 38f, 28f), new Vector2(40f, 38f), TextAlignmentOptions.Center);
+        ExhibitUi.Image("SectionTopLine", section, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, size.y / 2f - 7f), new Vector2(size.x - 26f, 4f));
+        ExhibitUi.Image("SectionNumberSeal", section, ExhibitUi.SolidSprite(new Color32(139, 37, 28, 235)), Color.white, new Vector2(-size.x / 2f + 46f, size.y / 2f - 48f), new Vector2(52f, 52f));
+        var numberText = ExhibitUi.Text("SectionNumber_TMP", section, number, 27, new Color32(255, 238, 216, 255), new Vector2(-size.x / 2f + 46f, size.y / 2f - 48f), new Vector2(44f, 40f), TextAlignmentOptions.Center);
         numberText.fontStyle = FontStyles.Bold;
 
-        sectionTitles[index] = ExhibitUi.Text("SectionTitle_TMP", section, string.Empty, 29, ExhibitUi.SealRed, new Vector2(-size.x / 2f + 118f, 31f), new Vector2(size.x - 160f, 36f), TextAlignmentOptions.Left);
+        sectionTitles[index] = ExhibitUi.Text("SectionTitle_TMP", section, string.Empty, 30, ExhibitUi.SealRed, new Vector2(-size.x / 2f + 116f, size.y / 2f - 48f), new Vector2(size.x - 146f, 42f), TextAlignmentOptions.Left);
         sectionTitles[index].fontStyle = FontStyles.Bold;
-        sectionBodies[index] = ExhibitUi.Text("Body_TMP", section, string.Empty, 24, ExhibitUi.DarkBrown, new Vector2(24f, -25f), new Vector2(size.x - 76f, 70f), TextAlignmentOptions.TopLeft);
-        sectionBodies[index].lineSpacing = 8f;
+        sectionBodies[index] = ExhibitUi.Text("Body_TMP", section, string.Empty, 24, ExhibitUi.DarkBrown, new Vector2(0f, -34f), new Vector2(size.x - 70f, size.y - 106f), TextAlignmentOptions.TopLeft);
+        sectionBodies[index].lineSpacing = 7f;
     }
 
     private void AddCloseButton(RectTransform panel)

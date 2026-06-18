@@ -93,7 +93,6 @@ public class KnowledgeInfoPanel : MonoBehaviour
         ExhibitUi.Image("WoodFrameImage", panel, ExhibitUi.SolidSprite(new Color32(78, 43, 20, 255)), Color.white, Vector2.zero, new Vector2(PanelWidth, PanelHeight));
         ExhibitUi.Image("PaperBackgroundImage", panel, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(PanelWidth - 58f, PanelHeight - 58f));
         ExhibitUi.Image("PaperWash", panel, ExhibitUi.SolidSprite(new Color32(255, 246, 213, 126)), Color.white, Vector2.zero, new Vector2(PanelWidth - 120f, PanelHeight - 126f));
-        ExhibitUi.Image("InkPatternImage", panel, ExhibitUi.SolidSprite(new Color32(74, 54, 36, 30)), Color.white, new Vector2(-470f, 250f), new Vector2(430f, 110f));
         ExhibitUi.Image("GoldHeaderLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, 284f), new Vector2(1260f, 4f));
         ExhibitUi.Image("GoldFooterLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, -358f), new Vector2(1260f, 4f));
 
