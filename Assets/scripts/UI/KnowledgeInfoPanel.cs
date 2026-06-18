@@ -93,7 +93,6 @@ public class KnowledgeInfoPanel : MonoBehaviour
         ExhibitUi.Image("WoodFrameImage", panel, ExhibitUi.SolidSprite(new Color32(78, 43, 20, 255)), Color.white, Vector2.zero, new Vector2(PanelWidth, PanelHeight));
         ExhibitUi.Image("PaperBackgroundImage", panel, ExhibitUi.PaperSprite(), Color.white, Vector2.zero, new Vector2(PanelWidth - 58f, PanelHeight - 58f));
         ExhibitUi.Image("PaperWash", panel, ExhibitUi.SolidSprite(new Color32(255, 246, 213, 126)), Color.white, Vector2.zero, new Vector2(PanelWidth - 120f, PanelHeight - 126f));
-        ExhibitUi.Image("GoldHeaderLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, 284f), new Vector2(1260f, 4f));
         ExhibitUi.Image("GoldFooterLine", panel, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, -358f), new Vector2(1260f, 4f));
 
         AddCornerDecorations(panel);
@@ -107,7 +106,7 @@ public class KnowledgeInfoPanel : MonoBehaviour
         var museumPlaque = ExhibitUi.Rect("MuseumPlaque", panel, new Vector2(0f, 344f), new Vector2(660f, 54f));
         ExhibitUi.Image("PlaqueOuter", museumPlaque, ExhibitUi.SolidSprite(new Color32(82, 48, 24, 255)), Color.white, Vector2.zero, new Vector2(660f, 54f));
         ExhibitUi.Image("PlaqueInner", museumPlaque, ExhibitUi.SolidSprite(new Color32(38, 24, 15, 245)), Color.white, Vector2.zero, new Vector2(628f, 34f));
-        var museumText = ExhibitUi.Text("MuseumPlaque_TMP", museumPlaque, "中国古建筑知识馆 · 高清文字讲解", 28, new Color32(232, 186, 93, 255), Vector2.zero, new Vector2(596f, 38f), TextAlignmentOptions.Center);
+        var museumText = ExhibitUi.Text("MuseumPlaque_TMP", museumPlaque, "中国古建筑知识馆 · 文字讲解", 28, new Color32(232, 186, 93, 255), Vector2.zero, new Vector2(596f, 38f), TextAlignmentOptions.Center);
         museumText.fontStyle = FontStyles.Bold;
 
         titleText = ExhibitUi.Text("KnowledgeTitle_TMP", panel, string.Empty, 82, ExhibitUi.DarkBrown, new Vector2(0f, 263f), new Vector2(930f, 92f), TextAlignmentOptions.Center);
