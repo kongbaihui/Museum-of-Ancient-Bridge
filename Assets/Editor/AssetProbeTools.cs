@@ -82,7 +82,7 @@ public static class AssetProbeTools
             canvasRect = canvasObj.AddComponent<RectTransform>();
         }
         canvasRect.sizeDelta = new Vector2(texture.width, texture.height);
-        canvasObj.transform.position = new Vector3(-20.38f, 6.55f, -6.21f);
+        canvasObj.transform.position = new Vector3(-20.38f, 6.55f, -5.5f);
         canvasObj.transform.rotation = Quaternion.identity;
         canvasObj.transform.localScale = Vector3.one * 0.0068f;
 
