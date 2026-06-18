@@ -5,7 +5,7 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 30f;
+    public float moveSpeed = 18f;
     public float groundAcceleration = 120f;
     public float airAcceleration = 120f;
     public float idleDeceleration = 100f;

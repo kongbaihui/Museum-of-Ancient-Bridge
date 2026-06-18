@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class PersonInfoPanel : MonoBehaviour
 {
@@ -41,8 +44,8 @@ public class PersonInfoPanel : MonoBehaviour
 
         Build();
 
-        nameText.text = info.title;
-        subtitleText.text = info.subtitle;
+        ExhibitUi.SetText(nameText, info.title);
+        ExhibitUi.SetText(subtitleText, info.subtitle);
         portraitImage.sprite = info.mainImage;
         portraitImage.enabled = info.mainImage != null;
 
@@ -57,8 +60,8 @@ public class PersonInfoPanel : MonoBehaviour
 
         for (int i = 0; i < sectionTitles.Length; i++)
         {
-            sectionTitles[i].text = titles[i];
-            sectionBodies[i].text = bodies[i];
+            ExhibitUi.SetText(sectionTitles[i], titles[i]);
+            ExhibitUi.SetText(sectionBodies[i], bodies[i]);
         }
 
         gameObject.SetActive(true);
@@ -227,7 +230,6 @@ internal static class ExhibitUi
     {
         var rect = Rect(name, parent, position, size);
         var tmp = rect.gameObject.AddComponent<TextMeshProUGUI>();
-        tmp.text = text;
         tmp.font = ChineseFont();
         tmp.fontSize = fontSize;
         tmp.color = color;
@@ -235,7 +237,46 @@ internal static class ExhibitUi
         tmp.enableWordWrapping = true;
         tmp.overflowMode = TextOverflowModes.Overflow;
         tmp.raycastTarget = false;
+        SetText(tmp, text);
         return tmp;
+    }
+
+    public static void SetText(TextMeshProUGUI tmp, string text)
+    {
+        if (tmp == null)
+        {
+            return;
+        }
+
+        string value = text ?? string.Empty;
+        EnsureCharacters(tmp.font != null ? tmp.font : ChineseFont(), value);
+        tmp.text = value;
+    }
+
+    private static void EnsureCharacters(TMP_FontAsset fontAsset, string text)
+    {
+        if (fontAsset == null || string.IsNullOrEmpty(text))
+        {
+            return;
+        }
+
+        if (fontAsset.atlasPopulationMode == AtlasPopulationMode.Dynamic)
+        {
+            fontAsset.TryAddCharacters(text, out _);
+        }
+
+        if (fontAsset.fallbackFontAssetTable == null)
+        {
+            return;
+        }
+
+        foreach (var fallback in fontAsset.fallbackFontAssetTable)
+        {
+            if (fallback != null && fallback.atlasPopulationMode == AtlasPopulationMode.Dynamic)
+            {
+                fallback.TryAddCharacters(text, out _);
+            }
+        }
     }
 
     public static Sprite SolidSprite(Color32 color)
@@ -295,11 +336,16 @@ internal static class ExhibitUi
             return chineseFont;
         }
 
+        TMP_FontAsset projectFont = LoadProjectChineseFontAsset();
+        if (projectFont != null)
+        {
+            chineseFont = projectFont;
+            return chineseFont;
+        }
+
         try
         {
-            Font font = Font.CreateDynamicFontFromOSFont(
-                new[] { "Microsoft YaHei", "SimHei", "SimSun", "KaiTi" },
-                72);
+            Font font = CreateOsFont(new[] { "DengXian", "Microsoft YaHei UI", "Microsoft YaHei", "SimHei", "SimSun", "KaiTi" }, 72);
 
             if (font != null)
             {
@@ -333,9 +379,7 @@ internal static class ExhibitUi
 
         try
         {
-            Font font = Font.CreateDynamicFontFromOSFont(
-                new[] { "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", "SimHei" },
-                88);
+            Font font = CreateOsFont(new[] { "STXinwei", "STXingkai", "STKaiti", "KaiTi", "FZShuTi", "Microsoft YaHei", "SimHei" }, 88);
 
             if (font != null)
             {
@@ -348,6 +392,7 @@ internal static class ExhibitUi
                     4096,
                     AtlasPopulationMode.Dynamic);
                 titleFont.name = "RuntimeChineseTitleTMPFont";
+                AddFallback(titleFont, ChineseFont());
                 return titleFont;
             }
         }
@@ -358,5 +403,50 @@ internal static class ExhibitUi
 
         titleFont = ChineseFont();
         return titleFont;
+    }
+
+    private static TMP_FontAsset LoadProjectChineseFontAsset()
+    {
+#if UNITY_EDITOR
+        var fontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Materials/Fonts/DENG SDF.asset");
+        if (fontAsset != null)
+        {
+            fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+            return fontAsset;
+        }
+#endif
+        return Resources.Load<TMP_FontAsset>("Fonts/DENG SDF");
+    }
+
+    private static Font CreateOsFont(string[] fontNames, int size)
+    {
+        foreach (string fontName in fontNames)
+        {
+            Font font = Font.CreateDynamicFontFromOSFont(fontName, size);
+            if (font != null)
+            {
+                return font;
+            }
+        }
+
+        return null;
+    }
+
+    private static void AddFallback(TMP_FontAsset target, TMP_FontAsset fallback)
+    {
+        if (target == null || fallback == null || target == fallback)
+        {
+            return;
+        }
+
+        if (target.fallbackFontAssetTable == null)
+        {
+            target.fallbackFontAssetTable = new System.Collections.Generic.List<TMP_FontAsset>();
+        }
+
+        if (!target.fallbackFontAssetTable.Contains(fallback))
+        {
+            target.fallbackFontAssetTable.Add(fallback);
+        }
     }
 }

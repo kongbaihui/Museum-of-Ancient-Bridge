@@ -42,8 +42,8 @@ public class KnowledgeInfoPanel : MonoBehaviour
 
         Build();
 
-        titleText.text = info.title;
-        subtitleText.text = info.subtitle;
+        ExhibitUi.SetText(titleText, info.title);
+        ExhibitUi.SetText(subtitleText, info.subtitle);
         diagramImage.sprite = info.mainImage;
         diagramImage.enabled = info.mainImage != null;
         calloutImage.sprite = info.detailImage != null ? info.detailImage : info.mainImage;
@@ -60,13 +60,13 @@ public class KnowledgeInfoPanel : MonoBehaviour
 
         for (int i = 0; i < sectionTitles.Length; i++)
         {
-            sectionTitles[i].text = titles[i];
-            sectionBodies[i].text = bodies[i];
+            ExhibitUi.SetText(sectionTitles[i], titles[i]);
+            ExhibitUi.SetText(sectionBodies[i], bodies[i]);
         }
 
-        iconTexts[0].text = "构件";
-        iconTexts[1].text = "受力";
-        iconTexts[2].text = "营造";
+        ExhibitUi.SetText(iconTexts[0], "构件");
+        ExhibitUi.SetText(iconTexts[1], "受力");
+        ExhibitUi.SetText(iconTexts[2], "营造");
 
         gameObject.SetActive(true);
         canvasGroup.alpha = 1f;
@@ -116,20 +116,26 @@ public class KnowledgeInfoPanel : MonoBehaviour
 
     private void AddHeader(RectTransform panel)
     {
-        titleText = ExhibitUi.Text("KnowledgeTitle_TMP", panel, string.Empty, 60, ExhibitUi.DarkBrown, new Vector2(-400f, 330f), new Vector2(720f, 78f), TextAlignmentOptions.Left);
+        var museumPlaque = ExhibitUi.Rect("MuseumPlaque", panel, new Vector2(0f, 368f), new Vector2(620f, 48f));
+        ExhibitUi.Image("PlaqueOuter", museumPlaque, ExhibitUi.SolidSprite(new Color32(82, 48, 24, 255)), Color.white, Vector2.zero, new Vector2(620f, 48f));
+        ExhibitUi.Image("PlaqueInner", museumPlaque, ExhibitUi.SolidSprite(new Color32(38, 24, 15, 245)), Color.white, Vector2.zero, new Vector2(592f, 30f));
+        var museumText = ExhibitUi.Text("MuseumPlaque_TMP", museumPlaque, "中国古建筑知识馆 · Unity互动博物馆", 27, new Color32(226, 177, 86, 255), Vector2.zero, new Vector2(560f, 34f), TextAlignmentOptions.Center);
+        museumText.fontStyle = FontStyles.Bold;
+
+        titleText = ExhibitUi.Text("KnowledgeTitle_TMP", panel, string.Empty, 82, ExhibitUi.DarkBrown, new Vector2(0f, 305f), new Vector2(880f, 96f), TextAlignmentOptions.Center);
         titleText.font = ExhibitUi.TitleFont();
         titleText.fontStyle = FontStyles.Bold;
-        subtitleText = ExhibitUi.Text("Subtitle_TMP", panel, string.Empty, 25, ExhibitUi.SoftBrown, new Vector2(-348f, 280f), new Vector2(860f, 42f), TextAlignmentOptions.Left);
+        subtitleText = ExhibitUi.Text("Subtitle_TMP", panel, string.Empty, 30, ExhibitUi.SoftBrown, new Vector2(0f, 246f), new Vector2(900f, 44f), TextAlignmentOptions.Center);
 
-        var seal = ExhibitUi.Rect("RedSealImage", panel, new Vector2(584f, 314f), new Vector2(76f, 76f));
-        ExhibitUi.Image("SealShape", seal, ExhibitUi.SolidSprite(new Color32(145, 32, 24, 220)), Color.white, Vector2.zero, new Vector2(76f, 76f));
-        var sealText = ExhibitUi.Text("Seal_TMP", seal, "营造", 25, new Color32(255, 238, 216, 255), Vector2.zero, new Vector2(58f, 62f), TextAlignmentOptions.Center);
+        var seal = ExhibitUi.Rect("RedSealImage", panel, new Vector2(490f, 304f), new Vector2(70f, 104f));
+        ExhibitUi.Image("SealShape", seal, ExhibitUi.SolidSprite(new Color32(145, 32, 24, 232)), Color.white, Vector2.zero, new Vector2(70f, 104f));
+        var sealText = ExhibitUi.Text("Seal_TMP", seal, "古建\n知识", 25, new Color32(255, 238, 216, 255), Vector2.zero, new Vector2(48f, 84f), TextAlignmentOptions.Center);
         sealText.fontStyle = FontStyles.Bold;
     }
 
     private void AddDiagramArea(RectTransform panel)
     {
-        var diagramArea = ExhibitUi.Rect("DiagramArea", panel, new Vector2(-405f, -38f), new Vector2(555f, 610f));
+        var diagramArea = ExhibitUi.Rect("DiagramArea", panel, new Vector2(-410f, -70f), new Vector2(560f, 560f));
         ExhibitUi.Image("DiagramPaper", diagramArea, ExhibitUi.SolidSprite(new Color32(248, 239, 214, 232)), Color.white, Vector2.zero, new Vector2(555f, 610f));
         ExhibitUi.Image("DiagramFrame", diagramArea, ExhibitUi.SolidSprite(new Color32(107, 63, 31, 255)), Color.white, new Vector2(0f, 105f), new Vector2(474f, 348f));
         diagramImage = ExhibitUi.Image("MainDiagramImage", diagramArea, null, Color.white, new Vector2(0f, 105f), new Vector2(444f, 318f));

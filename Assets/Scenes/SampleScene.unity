@@ -7591,8 +7591,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b6e4c750613e749afb2a8731d11077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 2.56
-  sensY: 2.56
+  sensX: 2.048
+  sensY: 2.048
   lookSmooth: 20
   orientation: {fileID: 2055375784}
 --- !u!1 &983718018
@@ -9646,7 +9646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98549d1b806c53245acd69a4fc9c6ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 30
+  moveSpeed: 18
   groundAcceleration: 120
   airAcceleration: 120
   idleDeceleration: 100
