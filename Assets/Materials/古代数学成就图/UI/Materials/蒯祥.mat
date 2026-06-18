@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: "\u5B59\u5B50\u7B97\u7ECF"
+  m_Name: "\u84AF\u7965"
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -38,12 +38,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Scale: {x: 1, y: 1.4}
+        m_Offset: {x: 0, y: 0.76}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 28271112311069d4dbd35513b8f9f7a5, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: 159869a3f76c33c439834c84c33910ec, type: 3}
+        m_Scale: {x: 1, y: 1.4}
+        m_Offset: {x: 0, y: 0.76}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
