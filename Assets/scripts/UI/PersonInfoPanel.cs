@@ -20,8 +20,16 @@ public class PersonInfoPanel : MonoBehaviour
     public void Initialize(Action onClose)
     {
         closeRequested = onClose;
-        Build();
-        Hide();
+        gameObject.SetActive(false);
+
+        try
+        {
+            Build();
+        }
+        finally
+        {
+            Hide();
+        }
     }
 
     public void Show(ExhibitInfo info)
@@ -287,25 +295,32 @@ internal static class ExhibitUi
             return chineseFont;
         }
 
-        Font font = Font.CreateDynamicFontFromOSFont(
-            new[] { "Microsoft YaHei", "SimHei", "SimSun", "KaiTi" },
-            72);
-
-        if (font == null)
+        try
         {
-            chineseFont = TMP_Settings.defaultFontAsset;
-            return chineseFont;
+            Font font = Font.CreateDynamicFontFromOSFont(
+                new[] { "Microsoft YaHei", "SimHei", "SimSun", "KaiTi" },
+                72);
+
+            if (font != null)
+            {
+                chineseFont = TMP_FontAsset.CreateFontAsset(
+                    font,
+                    72,
+                    9,
+                    GlyphRenderMode.SDFAA,
+                    4096,
+                    4096,
+                    AtlasPopulationMode.Dynamic);
+                chineseFont.name = "RuntimeChineseTMPFont";
+                return chineseFont;
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning($"Failed to create runtime Chinese TMP font. Falling back to TMP default font. {exception.Message}");
         }
 
-        chineseFont = TMP_FontAsset.CreateFontAsset(
-            font,
-            72,
-            9,
-            GlyphRenderMode.SDFAA,
-            4096,
-            4096,
-            AtlasPopulationMode.Dynamic);
-        chineseFont.name = "RuntimeChineseTMPFont";
+        chineseFont = TMP_Settings.defaultFontAsset;
         return chineseFont;
     }
 
@@ -316,25 +331,32 @@ internal static class ExhibitUi
             return titleFont;
         }
 
-        Font font = Font.CreateDynamicFontFromOSFont(
-            new[] { "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", "SimHei" },
-            88);
-
-        if (font == null)
+        try
         {
-            titleFont = ChineseFont();
-            return titleFont;
+            Font font = Font.CreateDynamicFontFromOSFont(
+                new[] { "STXingkai", "KaiTi", "FZShuTi", "Microsoft YaHei", "SimHei" },
+                88);
+
+            if (font != null)
+            {
+                titleFont = TMP_FontAsset.CreateFontAsset(
+                    font,
+                    88,
+                    9,
+                    GlyphRenderMode.SDFAA,
+                    4096,
+                    4096,
+                    AtlasPopulationMode.Dynamic);
+                titleFont.name = "RuntimeChineseTitleTMPFont";
+                return titleFont;
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning($"Failed to create runtime title TMP font. Falling back to body font. {exception.Message}");
         }
 
-        titleFont = TMP_FontAsset.CreateFontAsset(
-            font,
-            88,
-            9,
-            GlyphRenderMode.SDFAA,
-            4096,
-            4096,
-            AtlasPopulationMode.Dynamic);
-        titleFont.name = "RuntimeChineseTitleTMPFont";
+        titleFont = ChineseFont();
         return titleFont;
     }
 }

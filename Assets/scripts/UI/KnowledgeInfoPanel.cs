@@ -21,8 +21,16 @@ public class KnowledgeInfoPanel : MonoBehaviour
     public void Initialize(Action onClose)
     {
         closeRequested = onClose;
-        Build();
-        Hide();
+        gameObject.SetActive(false);
+
+        try
+        {
+            Build();
+        }
+        finally
+        {
+            Hide();
+        }
     }
 
     public void Show(ExhibitInfo info)

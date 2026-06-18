@@ -20,7 +20,7 @@ public class UImanager : MonoBehaviour
         EnsureDefaultExhibits();
         BuildLookup();
         HideLegacyImagePanels();
-        CreateInfoPanels();
+        RemoveExistingInfoCanvas();
     }
 
     private void Update()
@@ -51,6 +51,13 @@ public class UImanager : MonoBehaviour
     private void ShowExhibit(ExhibitInfo info)
     {
         if (info == null)
+        {
+            return;
+        }
+
+        EnsureInfoPanels();
+
+        if (personPanel == null || knowledgePanel == null)
         {
             return;
         }
@@ -87,6 +94,16 @@ public class UImanager : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    private void EnsureInfoPanels()
+    {
+        if (personPanel != null && knowledgePanel != null)
+        {
+            return;
+        }
+
+        CreateInfoPanels();
     }
 
     private void ToggleVideoIfHit(RaycastHit hit, Transform videoTransform)
@@ -135,6 +152,7 @@ public class UImanager : MonoBehaviour
         }
 
         var canvas = canvasObject.GetComponent<Canvas>();
+        canvasObject.SetActive(true);
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         canvas.sortingOrder = 500;
 
@@ -156,9 +174,19 @@ public class UImanager : MonoBehaviour
         knowledgePanel.Initialize(CloseCurrentPage);
     }
 
+    private void RemoveExistingInfoCanvas()
+    {
+        var canvasObject = GameObject.Find("ExhibitInfoCanvas");
+        if (canvasObject != null)
+        {
+            Destroy(canvasObject);
+        }
+    }
+
     private T CreatePanel<T>(string panelName, Transform parent) where T : Component
     {
         var panelObject = new GameObject(panelName, typeof(RectTransform));
+        panelObject.SetActive(false);
         panelObject.transform.SetParent(parent, false);
         var rect = panelObject.GetComponent<RectTransform>();
         ExhibitUi.SetStretch(rect);
