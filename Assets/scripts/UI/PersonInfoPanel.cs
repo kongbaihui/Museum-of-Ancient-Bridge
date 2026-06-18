@@ -132,10 +132,10 @@ public class PersonInfoPanel : MonoBehaviour
 
         sectionTitles = new TextMeshProUGUI[4];
         sectionBodies = new TextMeshProUGUI[4];
-        AddSection(panel, 0, "Section_Biography", "一", new Vector2(-55f, 112f), new Vector2(450f, 240f));
-        AddSection(panel, 1, "Section_Achievement", "二", new Vector2(430f, 112f), new Vector2(450f, 240f));
-        AddSection(panel, 2, "Section_Contribution", "三", new Vector2(-55f, -178f), new Vector2(450f, 240f));
-        AddSection(panel, 3, "Section_Influence", "四", new Vector2(430f, -178f), new Vector2(450f, 240f));
+        AddSection(panel, 0, "Section_Biography", "一", new Vector2(240f, 145f), new Vector2(880f, 118f));
+        AddSection(panel, 1, "Section_Achievement", "二", new Vector2(240f, 20f), new Vector2(880f, 118f));
+        AddSection(panel, 2, "Section_Contribution", "三", new Vector2(240f, -105f), new Vector2(880f, 118f));
+        AddSection(panel, 3, "Section_Influence", "四", new Vector2(240f, -230f), new Vector2(880f, 118f));
 
         AddCloseButton(panel);
     }
@@ -146,14 +146,15 @@ public class PersonInfoPanel : MonoBehaviour
         ExhibitUi.Image("SectionShadow", section, ExhibitUi.SolidSprite(new Color32(68, 38, 18, 42)), Color.white, new Vector2(8f, -8f), size);
         ExhibitUi.Image("SectionPaper", section, ExhibitUi.SolidSprite(new Color32(250, 241, 216, 240)), Color.white, Vector2.zero, size);
         ExhibitUi.Image("SectionTopLine", section, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 255)), Color.white, new Vector2(0f, size.y / 2f - 7f), new Vector2(size.x - 26f, 4f));
-        ExhibitUi.Image("SectionNumberSeal", section, ExhibitUi.SolidSprite(new Color32(139, 37, 28, 235)), Color.white, new Vector2(-size.x / 2f + 46f, size.y / 2f - 48f), new Vector2(52f, 52f));
-        var numberText = ExhibitUi.Text("SectionNumber_TMP", section, number, 27, new Color32(255, 238, 216, 255), new Vector2(-size.x / 2f + 46f, size.y / 2f - 48f), new Vector2(44f, 40f), TextAlignmentOptions.Center);
+        ExhibitUi.Image("SectionNumberSeal", section, ExhibitUi.SolidSprite(new Color32(139, 37, 28, 235)), Color.white, new Vector2(-size.x / 2f + 48f, size.y / 2f - 38f), new Vector2(52f, 52f));
+        var numberText = ExhibitUi.Text("SectionNumber_TMP", section, number, 27, new Color32(255, 238, 216, 255), new Vector2(-size.x / 2f + 48f, size.y / 2f - 38f), new Vector2(44f, 40f), TextAlignmentOptions.Center);
         numberText.fontStyle = FontStyles.Bold;
 
-        sectionTitles[index] = ExhibitUi.Text("SectionTitle_TMP", section, string.Empty, 30, ExhibitUi.SealRed, new Vector2(-size.x / 2f + 116f, size.y / 2f - 48f), new Vector2(size.x - 146f, 42f), TextAlignmentOptions.Left);
+        sectionTitles[index] = ExhibitUi.Text("SectionTitle_TMP", section, string.Empty, 28, ExhibitUi.SealRed, new Vector2(-size.x / 2f + 210f, size.y / 2f - 38f), new Vector2(250f, 42f), TextAlignmentOptions.Left);
         sectionTitles[index].fontStyle = FontStyles.Bold;
-        sectionBodies[index] = ExhibitUi.Text("Body_TMP", section, string.Empty, 24, ExhibitUi.DarkBrown, new Vector2(0f, -34f), new Vector2(size.x - 70f, size.y - 106f), TextAlignmentOptions.TopLeft);
-        sectionBodies[index].lineSpacing = 7f;
+        ExhibitUi.Image("SectionDivider", section, ExhibitUi.SolidSprite(new Color32(202, 153, 64, 165)), Color.white, new Vector2(-176f, -4f), new Vector2(3f, 74f));
+        sectionBodies[index] = ExhibitUi.Text("Body_TMP", section, string.Empty, 23, ExhibitUi.DarkBrown, new Vector2(140f, -10f), new Vector2(560f, 78f), TextAlignmentOptions.TopLeft);
+        sectionBodies[index].lineSpacing = 5f;
     }
 
     private void AddCloseButton(RectTransform panel)

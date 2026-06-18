@@ -133,15 +133,11 @@ public static class AssetProbeTools
         }
         raw.texture = texture;
         raw.color = Color.white;
+        raw.raycastTarget = false;
 
         if (overlay.GetComponent<CanvasRenderer>() == null)
         {
             overlay.AddComponent<CanvasRenderer>();
-        }
-
-        if (overlay.GetComponent<PrefaceOverlayDismiss>() == null)
-        {
-            overlay.AddComponent<PrefaceOverlayDismiss>();
         }
 
         overlay.transform.SetAsLastSibling();

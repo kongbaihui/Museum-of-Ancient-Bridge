@@ -13,7 +13,7 @@ public class movement : MonoBehaviour
     public float groundDrag = 0f;
 
     [Header("Jump")]
-    public float jumpForce = 10.5f;
+    public float jumpForce = 6.5f;
     public float jumpCoolDown = 0.6f;
     public float airMutiplier = 0.45f;
     public float coyoteTime = 0.12f;

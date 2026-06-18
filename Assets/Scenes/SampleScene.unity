@@ -6164,7 +6164,6 @@ GameObject:
   - component: {fileID: 777535522}
   - component: {fileID: 777535525}
   - component: {fileID: 777535524}
-  - component: {fileID: 777535523}
   m_Layer: 0
   m_Name: PrefaceOverlay
   m_TagString: Untagged
@@ -6192,18 +6191,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &777535523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777535521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4062fa5d88d77fc45b4174ab4ffdd816, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &777535524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6218,7 +6205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9450,7 +9437,7 @@ MonoBehaviour:
   airAcceleration: 120
   idleDeceleration: 100
   groundDrag: 0
-  jumpForce: 10.5
+  jumpForce: 6.5
   jumpCoolDown: 0.6
   airMutiplier: 0.45
   coyoteTime: 0.12
