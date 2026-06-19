@@ -154,6 +154,6 @@ public class LevelManager : MonoBehaviour
 
     void OnBackMainMenuBtn()
     {
-        SceneManager.LoadScene("SelectLevel");
+        SceneManager.LoadScene("SampleScene");
     }
 }

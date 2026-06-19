@@ -26,7 +26,8 @@ public class gamemanager1 : MonoBehaviour
 
     private AudioSource _audioSource = null;
     public AudioClip background_music = null;
-    private int flag = 0;
+    private bool isMusicPlaying = false;
+    private GameObject levelSelectPanel;
 
 
     public enum STATE
@@ -126,7 +127,7 @@ public class gamemanager1 : MonoBehaviour
 
         GameObject.Find("PanseBtn").GetComponent<Button>().onClick.AddListener(() => { OnPauseBtn(); });
         GameObject.Find("AudioBtn").GetComponent<Button>().onClick.AddListener(() => { OnAudioBtn(); });
-        GameObject.Find("AboutBtn").GetComponent<Button>().onClick.AddListener(() => { OnAboutBtn(); });
+        GameObject.Find("AboutBtn").GetComponent<Button>().onClick.AddListener(() => { OnSkipBtn(); });
     }
 
     private void destroyAll()
@@ -146,6 +147,7 @@ public class gamemanager1 : MonoBehaviour
     {
         Image bg = GameObject.Find("bg").GetComponent<Image>();
         bg.sprite = bg_sprites[levelId - 1];
+        std = 0;
         buildAll();
         SwitchState(STATE.Normal);
         _timer = 0;
@@ -393,15 +395,12 @@ public class gamemanager1 : MonoBehaviour
 
     public void NextLevel()
     {
-        if (levelId != 7)
+        int playableLevelCount = GetPlayableLevelCount();
+        if (levelId < playableLevelCount)
         {
-            int levelCount = DataMgr.Instance().levelData.levels.Length;
-            if (levelId < levelCount)
-            {
-                levelId++;
-                DataMgr.Instance().levelId = levelId;
-                levelInfo = DataMgr.Instance().levelData.levels[levelId - 1];
-            }
+            levelId++;
+            DataMgr.Instance().levelId = levelId;
+            levelInfo = DataMgr.Instance().levelData.levels[levelId - 1];
             Init();
             GameObject.Find("levelTxt").GetComponent<Text>().text = "关  卡 " + levelId.ToString();
         }
@@ -416,6 +415,183 @@ public class gamemanager1 : MonoBehaviour
         destroyAll();
         Init();
     }
+
+    public void OpenLevelSelectPanel()
+    {
+        if (levelSelectPanel == null)
+        {
+            CreateLevelSelectPanel();
+        }
+
+        if (levelSelectPanel == null)
+        {
+            return;
+        }
+
+        m_state = STATE.Pause;
+        resultPanel.gameObject.SetActive(false);
+        pausePanel.SetActive(false);
+        aboutPanel.SetActive(false);
+        levelSelectPanel.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void CreateLevelSelectPanel()
+    {
+        GameObject canvas = GameObject.Find("Canvas");
+        if (canvas == null)
+        {
+            Debug.LogWarning("未找到 Canvas，无法创建选关面板。");
+            return;
+        }
+
+        Font font = level_text != null ? level_text.font : Resources.GetBuiltinResource<Font>("Arial.ttf");
+        levelSelectPanel = CreateUIRoot("LevelSelectPanel", canvas.transform, new Color(0f, 0f, 0f, 0.62f));
+
+        GameObject panel = CreateUIRoot("LevelSelectContent", levelSelectPanel.transform, new Color(0.18f, 0.11f, 0.07f, 0.96f));
+        RectTransform panelRect = panel.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0.5f, 0.5f);
+        panelRect.anchorMax = new Vector2(0.5f, 0.5f);
+        panelRect.pivot = new Vector2(0.5f, 0.5f);
+        panelRect.sizeDelta = new Vector2(560f, 300f);
+        panelRect.anchoredPosition = Vector2.zero;
+
+        CreateLabel("Title", panel.transform, "选择关卡", font, 36, new Vector2(0f, 105f), new Vector2(500f, 54f), new Color(1f, 0.86f, 0.55f, 1f));
+
+        int levelCount = GetPlayableLevelCount();
+        int columns = 4;
+        Vector2 start = new Vector2(-180f, 30f);
+        for (int i = 0; i < levelCount; i++)
+        {
+            int level = i + 1;
+            int row = i / columns;
+            int col = i % columns;
+            Vector2 position = start + new Vector2(col * 120f, -row * 70f);
+            CreateLevelButton(panel.transform, "LevelBtn" + level, "第 " + level + " 关", font, position, () => SelectLevel(level));
+        }
+
+        CreateLevelButton(panel.transform, "CloseLevelSelectBtn", "返回", font, new Vector2(0f, -105f), CloseLevelSelectPanel);
+        levelSelectPanel.SetActive(false);
+    }
+
+    private GameObject CreateUIRoot(string name, Transform parent, Color color)
+    {
+        GameObject obj = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        obj.transform.SetParent(parent, false);
+
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        Image image = obj.GetComponent<Image>();
+        image.color = color;
+        return obj;
+    }
+
+    private void CreateLabel(string name, Transform parent, string text, Font font, int fontSize, Vector2 position, Vector2 size, Color color)
+    {
+        GameObject obj = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+        obj.transform.SetParent(parent, false);
+
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = position;
+        rect.sizeDelta = size;
+
+        Text label = obj.GetComponent<Text>();
+        label.text = text;
+        label.font = font;
+        label.fontSize = fontSize;
+        label.fontStyle = FontStyle.Bold;
+        label.alignment = TextAnchor.MiddleCenter;
+        label.color = color;
+        label.raycastTarget = false;
+    }
+
+    private void CreateLevelButton(Transform parent, string name, string text, Font font, Vector2 position, UnityEngine.Events.UnityAction onClick)
+    {
+        GameObject obj = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        obj.transform.SetParent(parent, false);
+
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = position;
+        rect.sizeDelta = new Vector2(110f, 52f);
+
+        Image image = obj.GetComponent<Image>();
+        image.color = new Color(0.72f, 0.38f, 0.14f, 1f);
+
+        Button button = obj.GetComponent<Button>();
+        button.targetGraphic = image;
+        button.onClick.AddListener(onClick);
+
+        CreateLabel("Text", obj.transform, text, font, 24, Vector2.zero, rect.sizeDelta, Color.white);
+    }
+
+    private void CloseLevelSelectPanel()
+    {
+        levelSelectPanel.SetActive(false);
+        SwitchState(STATE.Normal);
+    }
+
+    private void SelectLevel(int selectedLevel)
+    {
+        if (DataMgr.Instance().levelData == null)
+        {
+            DataMgr.Instance().InitLevelData();
+        }
+
+        int levelCount = GetPlayableLevelCount();
+        if (selectedLevel < 1 || selectedLevel > levelCount)
+        {
+            return;
+        }
+
+        if (levelSelectPanel != null)
+        {
+            levelSelectPanel.SetActive(false);
+        }
+
+        destroyAll();
+        levelId = selectedLevel;
+        DataMgr.Instance().levelId = selectedLevel;
+        DataMgr.Instance().levelInfo = DataMgr.Instance().levelData.levels[selectedLevel - 1];
+        levelInfo = DataMgr.Instance().levelInfo;
+        Init();
+        level_text.text = "关  卡 " + levelId.ToString();
+    }
+
+    private int GetPlayableLevelCount()
+    {
+        int dataCount = DataMgr.Instance().levelData != null ? DataMgr.Instance().levelData.levels.Length : int.MaxValue;
+        int spriteCount = bg_sprites != null && bg_sprites.Length > 0 ? bg_sprites.Length : int.MaxValue;
+        int resourceCount = 0;
+
+        for (int i = 1; i <= dataCount; i++)
+        {
+            if (Resources.Load<TextAsset>("models/" + i) == null)
+            {
+                break;
+            }
+
+            resourceCount++;
+        }
+
+        if (resourceCount == 0)
+        {
+            resourceCount = dataCount == int.MaxValue ? 0 : dataCount;
+        }
+
+        return Mathf.Min(dataCount, spriteCount, resourceCount);
+    }
+
     public void SwitchState(STATE state)
     {
 
@@ -498,21 +674,32 @@ public class gamemanager1 : MonoBehaviour
 
     void OnAudioBtn()
     {
-        //声音开关
-        //声音开关
-        flag++;
-        if (flag == 1) { _audioSource = gameObject.AddComponent<AudioSource>(); }
+        if (_audioSource == null)
+        {
+            _audioSource = GetComponent<AudioSource>();
+            if (_audioSource == null)
+            {
+                _audioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
 
-        //加载 Audio Clip 对象
-        background_music = Resources.Load<AudioClip>("music/background_music");
-        //播放声音
+        if (background_music == null)
+        {
+            background_music = Resources.Load<AudioClip>("music/background_music");
+        }
+
+        if (background_music == null)
+        {
+            Debug.LogWarning("未找到 Resources/music/background_music 音频文件。");
+            return;
+        }
+
         _audioSource.loop = true;
         _audioSource.clip = background_music;
         _audioSource.volume = 0.25f;
 
-        //监听按钮点击事件
-
-        if (flag % 2 != 0)
+        isMusicPlaying = !isMusicPlaying;
+        if (isMusicPlaying)
         {
             _audioSource.Play();
         }
@@ -523,14 +710,22 @@ public class gamemanager1 : MonoBehaviour
 
     }
 
-    void OnAboutBtn()
+    void OnSkipBtn()
     {
 
 
         SwitchState(STATE.About);
         Cursor.lockState = CursorLockMode.Locked;
         // Init();
-        String para = @"Assets\Script\solutions\solution" + levelId + ".wood";
+        String para = Path.Combine(Application.dataPath, "Table", "Interlocked", "Script", "solutions", "solution" + levelId + ".wood");
+        if (!File.Exists(para))
+        {
+            Debug.LogWarning("未找到跳过步骤文件：" + para);
+            SwitchState(STATE.Normal);
+            Cursor.lockState = CursorLockMode.None;
+            return;
+        }
+
         StreamReader solution = new StreamReader(para);
 
         destroyAll();
@@ -600,6 +795,7 @@ public class gamemanager1 : MonoBehaviour
 
 
         }
+        solution.Close();
         StartCoroutine(DelayToInvokeDo(() =>
         {
 

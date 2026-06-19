@@ -20,8 +20,7 @@ public class PanelPause : MonoBehaviour {
 
     void OnExit()
     {
-       // UnityEditor.EditorApplication.isPlaying = false;
-        Application.Quit();
+        SceneManager.LoadScene("SampleScene");
     }
     void OnContinueBtn()
     {
@@ -35,6 +34,6 @@ public class PanelPause : MonoBehaviour {
 
     void OnBackMainMenu()
     {
-        SceneManager.LoadScene("SampleScene");
+        gameMgr.OpenLevelSelectPanel();
     }
 }

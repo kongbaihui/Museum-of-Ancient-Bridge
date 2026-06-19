@@ -54,7 +54,7 @@ public class PanelResult : MonoBehaviour {
 
     void OnMainMenuBtn()
     {
-        SceneManager.LoadScene("SampleScene");
+        gameMgr.OpenLevelSelectPanel();
     }
 
     //设置比赛结果相关信息显示

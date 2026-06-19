@@ -27,10 +27,10 @@ public class Scene_Start : MonoBehaviour
 	}
    void exit()
     {
-        Application.Quit();
+        SceneManager.LoadScene("SampleScene");
     }
     void GoToMainMenu()
         {
-            SceneManager.LoadScene("SelectLevel");
+            SceneManager.LoadScene("Game");
         }
 }
