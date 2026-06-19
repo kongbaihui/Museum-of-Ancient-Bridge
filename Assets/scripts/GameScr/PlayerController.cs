@@ -20,10 +20,10 @@ public class PlayerController : MonoBehaviour
     public List<Transform> finalPath = new List<Transform>();
 
     [Header("Motion")]
-    public float stepDuration = 0.24f;
-    public float stairDurationMultiplier = 1.45f;
-    public float hopPower = 0.18f;
-    public float turnDuration = 0.16f;
+    public float stepDuration = 0.14f;
+    public float stairDurationMultiplier = 1.2f;
+    public float hopPower = 0.12f;
+    public float turnDuration = 0.08f;
     public Ease moveEase = Ease.InOutSine;
 
     void Start()
@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
 
             if (!walkable.dontRotate)
             {
-                s.Join(transform.DOLookAt(finalPath[i].position, turnDuration, AxisConstraint.Y, Vector3.up).SetEase(Ease.OutSine));
+                s.Join(transform.DOLookAt(finalPath[i].position, turnDuration, AxisConstraint.Y, Vector3.up).SetEase(Ease.OutQuad));
             }
         }
 

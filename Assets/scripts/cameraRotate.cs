@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class cameraRotate : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
-    public float lookSmooth = 14f;
+    public float sensX = 2.048f;
+    public float sensY = 2.048f;
+    public float lookSmooth = 20f;
 
     public Transform orientation;
 
@@ -29,8 +29,8 @@ public class cameraRotate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
+        float mouseX = Input.GetAxisRaw("Mouse X") * sensX;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * sensY;
 
         yRotation += mouseX;
         xRotation -= mouseY;

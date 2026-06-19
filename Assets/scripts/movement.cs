@@ -5,17 +5,17 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 30f;
+    public float moveSpeed = 18f;
     public float groundAcceleration = 120f;
-    public float airAcceleration = 7f;
-    public float idleDeceleration = 10f;
+    public float airAcceleration = 120f;
+    public float idleDeceleration = 100f;
     
-    public float groundDrag = 1.5f;
+    public float groundDrag = 0f;
 
     [Header("Jump")]
-    public float jumpForce;
-    public float jumpCoolDown;
-    public float airMutiplier;
+    public float jumpForce = 6.5f;
+    public float jumpCoolDown = 0.6f;
+    public float airMutiplier = 0.45f;
     public float coyoteTime = 0.12f;
     public float jumpBufferTime = 0.12f;
     bool readyToJump;
@@ -47,8 +47,6 @@ public class movement : MonoBehaviour
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        if (whatIsGround.value == 0)
-            whatIsGround = Physics.DefaultRaycastLayers;
         readyToJump = true;
     }
 
@@ -65,10 +63,7 @@ public class movement : MonoBehaviour
         SpeedCon();
 
 
-        if (grounded)
-            rb.drag = groundDrag;
-        else
-            rb.drag = 0;
+        rb.drag = groundDrag;
 
     }
 
@@ -103,17 +98,27 @@ public class movement : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontallInput;
         Vector3 desiredDirection = moveDirection.sqrMagnitude > 0.01f ? moveDirection.normalized : Vector3.zero;
-        float acceleration = grounded ? groundAcceleration : airAcceleration;
+        Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         if (desiredDirection != Vector3.zero)
         {
-            float multiplier = grounded ? 1f : airMutiplier;
-            rb.AddForce(desiredDirection * acceleration * multiplier, ForceMode.Acceleration);
+            float acceleration = grounded ? groundAcceleration : airAcceleration;
+            Vector3 desiredVelocity = desiredDirection * moveSpeed;
+            Vector3 nextVelocity = Vector3.MoveTowards(
+                flatVelocity,
+                desiredVelocity,
+                acceleration * Time.fixedDeltaTime);
+
+            rb.velocity = new Vector3(nextVelocity.x, rb.velocity.y, nextVelocity.z);
         }
-        else if (grounded)
+        else
         {
-            Vector3 flatVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-            rb.AddForce(-flatVelocity * idleDeceleration, ForceMode.Acceleration);
+            Vector3 nextVelocity = Vector3.MoveTowards(
+                flatVelocity,
+                Vector3.zero,
+                idleDeceleration * Time.fixedDeltaTime);
+
+            rb.velocity = new Vector3(nextVelocity.x, rb.velocity.y, nextVelocity.z);
         }
 
     }
