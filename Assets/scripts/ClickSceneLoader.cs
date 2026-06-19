@@ -49,7 +49,14 @@ public class ClickSceneLoader : MonoBehaviour
         }
 
         isLoading = true;
+        ReleaseCursorForInteractiveScene();
         SceneManager.LoadScene(sceneName);
+    }
+
+    private static void ReleaseCursorForInteractiveScene()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     private static bool IsPointerOverUi()

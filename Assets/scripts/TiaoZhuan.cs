@@ -53,7 +53,17 @@ public class TiaoZhuan : MonoBehaviour
             return;
         }
 
+        ReleaseCursorForInteractiveScene(sceneName);
         SceneManager.LoadScene(sceneName);
+    }
+
+    private static void ReleaseCursorForInteractiveScene(string sceneName)
+    {
+        if (sceneName != MuseumSceneName)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     private void ConfigureStartSceneMenu()
