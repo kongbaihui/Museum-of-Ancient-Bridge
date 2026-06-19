@@ -12,6 +12,7 @@ public class UImanager : MonoBehaviour
     public Transform Video1;
 
     private readonly Dictionary<string, ExhibitInfo> exhibitLookup = new Dictionary<string, ExhibitInfo>();
+    private readonly Dictionary<Transform, VideoCoverState> videoCoverLookup = new Dictionary<Transform, VideoCoverState>();
     private PersonInfoPanel personPanel;
     private KnowledgeInfoPanel knowledgePanel;
 
@@ -19,6 +20,7 @@ public class UImanager : MonoBehaviour
     {
         EnsureDefaultExhibits();
         BuildLookup();
+        ConfigureVideoCovers();
         HideLegacyImagePanels();
         RemoveExistingInfoCanvas();
     }
@@ -122,11 +124,79 @@ public class UImanager : MonoBehaviour
         if (player.isPlaying)
         {
             player.Stop();
+            player.time = 0d;
+            ShowVideoCover(videoTransform);
         }
         else
         {
+            if (videoCoverLookup.TryGetValue(videoTransform, out var state))
+            {
+                ApplyVideoOutput(player, state.Renderer);
+            }
+
             player.Play();
         }
+    }
+
+    private void ConfigureVideoCovers()
+    {
+        ConfigureVideoCover(Video, "VideoCovers/AncientBuildingsAirCover");
+        ConfigureVideoCover(Video1, "VideoCovers/TraditionalArchitectureCover");
+    }
+
+    private void ConfigureVideoCover(Transform videoTransform, string resourcePath)
+    {
+        if (videoTransform == null || videoCoverLookup.ContainsKey(videoTransform))
+        {
+            return;
+        }
+
+        var renderer = videoTransform.GetComponent<Renderer>();
+        var player = videoTransform.GetComponent<VideoPlayer>();
+        var coverTexture = Resources.Load<Texture2D>(resourcePath);
+        if (renderer == null || player == null || coverTexture == null)
+        {
+            return;
+        }
+
+        ApplyVideoOutput(player, renderer);
+        player.playOnAwake = false;
+        player.waitForFirstFrame = true;
+        player.isLooping = true;
+        player.Stop();
+        player.time = 0d;
+
+        videoCoverLookup[videoTransform] = new VideoCoverState(renderer, coverTexture);
+        ShowVideoCover(videoTransform);
+    }
+
+    private void ApplyVideoOutput(VideoPlayer player, Renderer renderer)
+    {
+        player.renderMode = VideoRenderMode.MaterialOverride;
+        player.targetMaterialRenderer = renderer;
+        player.targetMaterialProperty = "_MainTex";
+    }
+
+    private void ShowVideoCover(Transform videoTransform)
+    {
+        if (!videoCoverLookup.TryGetValue(videoTransform, out var state))
+        {
+            return;
+        }
+
+        state.Renderer.material.SetTexture("_MainTex", state.CoverTexture);
+    }
+
+    private sealed class VideoCoverState
+    {
+        public VideoCoverState(Renderer renderer, Texture2D coverTexture)
+        {
+            Renderer = renderer;
+            CoverTexture = coverTexture;
+        }
+
+        public Renderer Renderer { get; }
+        public Texture2D CoverTexture { get; }
     }
 
     private void BuildLookup()
